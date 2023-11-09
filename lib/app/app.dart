@@ -16,6 +16,7 @@ import 'package:aisu_realestate/ui/views/reports/reports_view.dart';
 import 'package:aisu_realestate/ui/views/settings/settings_view.dart';
 import 'package:aisu_realestate/ui/bottom_sheets/document/document_sheet.dart';
 import 'package:aisu_realestate/ui/dialogs/confirm/confirm_dialog.dart';
+import 'package:aisu_realestate/ui/views/login/login_view.dart';
 // @stacked-import
 
 @StackedApp(
@@ -31,6 +32,7 @@ import 'package:aisu_realestate/ui/dialogs/confirm/confirm_dialog.dart';
     MaterialRoute(page: AddListingsView),
     MaterialRoute(page: AddTenantsView),
     CustomRoute(page: AddPaymentView),
+    MaterialRoute(page: LoginView),
 // @stacked-route
   ],
   dependencies: [

@@ -9,6 +9,7 @@ import 'package:aisu_realestate/ui/views/home/home_view.dart' as _i2;
 import 'package:aisu_realestate/ui/views/listings/add_listings_view.dart'
     as _i10;
 import 'package:aisu_realestate/ui/views/listings/listings_view.dart' as _i5;
+import 'package:aisu_realestate/ui/views/login/login_view.dart' as _i13;
 import 'package:aisu_realestate/ui/views/payment/add_payment_view.dart' as _i12;
 import 'package:aisu_realestate/ui/views/payment/payment_view.dart' as _i7;
 import 'package:aisu_realestate/ui/views/reports/reports_view.dart' as _i8;
@@ -18,10 +19,10 @@ import 'package:aisu_realestate/ui/views/tenants/add_tenant_tab/add_tenants_view
     as _i11;
 import 'package:aisu_realestate/ui/views/tenants/tenants_view.dart' as _i6;
 import 'package:aisu_realestate/ui/views/wrapper/wrapper_view.dart' as _i4;
-import 'package:flutter/material.dart' as _i13;
+import 'package:flutter/material.dart' as _i14;
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart' as _i1;
-import 'package:stacked_services/stacked_services.dart' as _i14;
+import 'package:stacked_services/stacked_services.dart' as _i15;
 
 class Routes {
   static const homeView = '/home-view';
@@ -46,6 +47,8 @@ class Routes {
 
   static const addPaymentView = '/add-payment-view';
 
+  static const loginView = '/login-view';
+
   static const all = <String>{
     homeView,
     startupView,
@@ -58,6 +61,7 @@ class Routes {
     addListingsView,
     addTenantsView,
     addPaymentView,
+    loginView,
   };
 }
 
@@ -107,71 +111,75 @@ class StackedRouter extends _i1.RouterBase {
       Routes.addPaymentView,
       page: _i12.AddPaymentView,
     ),
+    _i1.RouteDef(
+      Routes.loginView,
+      page: _i13.LoginView,
+    ),
   ];
 
   final _pagesMap = <Type, _i1.StackedRouteFactory>{
     _i2.HomeView: (data) {
-      return _i13.MaterialPageRoute<dynamic>(
+      return _i14.MaterialPageRoute<dynamic>(
         builder: (context) => const _i2.HomeView(),
         settings: data,
       );
     },
     _i3.StartupView: (data) {
-      return _i13.MaterialPageRoute<dynamic>(
+      return _i14.MaterialPageRoute<dynamic>(
         builder: (context) => const _i3.StartupView(),
         settings: data,
       );
     },
     _i4.WrapperView: (data) {
-      return _i13.MaterialPageRoute<dynamic>(
+      return _i14.MaterialPageRoute<dynamic>(
         builder: (context) => const _i4.WrapperView(),
         settings: data,
       );
     },
     _i5.ListingsView: (data) {
-      return _i13.MaterialPageRoute<dynamic>(
+      return _i14.MaterialPageRoute<dynamic>(
         builder: (context) => const _i5.ListingsView(),
         settings: data,
       );
     },
     _i6.TenantsView: (data) {
-      return _i13.MaterialPageRoute<dynamic>(
+      return _i14.MaterialPageRoute<dynamic>(
         builder: (context) => const _i6.TenantsView(),
         settings: data,
       );
     },
     _i7.PaymentView: (data) {
-      return _i13.MaterialPageRoute<dynamic>(
+      return _i14.MaterialPageRoute<dynamic>(
         builder: (context) => const _i7.PaymentView(),
         settings: data,
       );
     },
     _i8.ReportsView: (data) {
-      return _i13.MaterialPageRoute<dynamic>(
+      return _i14.MaterialPageRoute<dynamic>(
         builder: (context) => const _i8.ReportsView(),
         settings: data,
       );
     },
     _i9.SettingsView: (data) {
-      return _i13.MaterialPageRoute<dynamic>(
+      return _i14.MaterialPageRoute<dynamic>(
         builder: (context) => const _i9.SettingsView(),
         settings: data,
       );
     },
     _i10.AddListingsView: (data) {
-      return _i13.MaterialPageRoute<dynamic>(
+      return _i14.MaterialPageRoute<dynamic>(
         builder: (context) => const _i10.AddListingsView(),
         settings: data,
       );
     },
     _i11.AddTenantsView: (data) {
-      return _i13.MaterialPageRoute<dynamic>(
+      return _i14.MaterialPageRoute<dynamic>(
         builder: (context) => const _i11.AddTenantsView(),
         settings: data,
       );
     },
     _i12.AddPaymentView: (data) {
-      return _i13.PageRouteBuilder<dynamic>(
+      return _i14.PageRouteBuilder<dynamic>(
         pageBuilder: (context, animation, secondaryAnimation) =>
             const _i12.AddPaymentView(),
         settings: data,
@@ -179,6 +187,12 @@ class StackedRouter extends _i1.RouterBase {
             (context, animation, secondaryAnimation, child) {
               return child;
             },
+      );
+    },
+    _i13.LoginView: (data) {
+      return _i14.MaterialPageRoute<dynamic>(
+        builder: (context) => const _i13.LoginView(),
+        settings: data,
       );
     },
   };
@@ -189,7 +203,7 @@ class StackedRouter extends _i1.RouterBase {
   Map<Type, _i1.StackedRouteFactory> get pagesMap => _pagesMap;
 }
 
-extension NavigatorStateExtension on _i14.NavigationService {
+extension NavigatorStateExtension on _i15.NavigationService {
   Future<dynamic> navigateToHomeView([
     int? routerId,
     bool preventDuplicates = true,
@@ -344,6 +358,20 @@ extension NavigatorStateExtension on _i14.NavigationService {
         transition: transition);
   }
 
+  Future<dynamic> navigateToLoginView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return navigateTo<dynamic>(Routes.loginView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
   Future<dynamic> replaceWithHomeView([
     int? routerId,
     bool preventDuplicates = true,
@@ -492,6 +520,20 @@ extension NavigatorStateExtension on _i14.NavigationService {
         transition,
   ]) async {
     return replaceWith<dynamic>(Routes.addPaymentView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithLoginView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return replaceWith<dynamic>(Routes.loginView,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

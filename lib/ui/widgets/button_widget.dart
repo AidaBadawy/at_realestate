@@ -8,12 +8,14 @@ class ButtonWidget extends StatelessWidget {
   final Function onTap;
   final bool isDisabled;
   final bool isBusy;
+  final double height;
   const ButtonWidget(
       {super.key,
       required this.text,
       required this.onTap,
       this.fontSize = 14,
       required this.isDisabled,
+      required this.height,
       required this.isBusy});
 
   @override
@@ -26,7 +28,7 @@ class ButtonWidget extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
-        height: 50,
+        height: height,
         child: ManropeText.bold(text, fontSize!, kcWhiteColor),
       ),
     );
