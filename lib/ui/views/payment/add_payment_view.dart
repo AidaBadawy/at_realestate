@@ -678,6 +678,7 @@ class AddPaymentView extends StackedView<PaymentViewModel>
       floatingActionButton: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: ButtonWidget(
+          height: 50,
           text: "Make Payment",
           onTap: () {},
           isBusy: false,

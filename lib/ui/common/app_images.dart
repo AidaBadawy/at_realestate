@@ -14,3 +14,4 @@ const String personIcon = "assets/icons/person.svg";
 const String invoiceIcon = "assets/icons/invoice.svg";
 const String dotsVertIcon = "assets/icons/dots_vert.svg";
 const String logoImage = "assets/images/logo_barzaq.png";
+const String loginBg = "assets/images/login_bg.jpeg";

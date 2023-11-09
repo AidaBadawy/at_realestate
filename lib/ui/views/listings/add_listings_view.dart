@@ -90,6 +90,7 @@ class AddListingsView extends StackedView<ListingsViewModel> {
           padding: const EdgeInsets.symmetric(horizontal: 15),
           child: ButtonWidget(
             isBusy: false,
+            height: 50,
             isDisabled: false,
             text: viewModel.currentIndex == 2 ? "Save Listing" : "Next",
             onTap: () => viewModel.currentIndex == 2

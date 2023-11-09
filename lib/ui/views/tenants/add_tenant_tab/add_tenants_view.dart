@@ -75,6 +75,7 @@ class AddTenantsView extends StackedView<TenantsViewModel> {
         floatingActionButton: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
           child: ButtonWidget(
+            height: 50,
             isBusy: false,
             isDisabled: false,
             text: "Next",
