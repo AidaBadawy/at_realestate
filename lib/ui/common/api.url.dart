@@ -32,9 +32,9 @@ class RealEstateUrls {
   }
 
   //Authentication
-  // static get leadUpdate {
-  //   return "lead/update/";
-  // }
+  static get login {
+    return "api/collections/users/auth-with-password";
+  }
 
   // static get userMobileActivate {
   //   return "user/mobile/activate/";
