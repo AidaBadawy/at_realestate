@@ -1,0 +1,16 @@
+const String drawerBackground = "assets/images/drawer_background.jpeg";
+const String buildingIcon = "assets/icons/building.svg";
+const String buildingTwoIcon = "assets/icons/building_two.svg";
+const String usersIcon = "assets/icons/users.svg";
+const String usersTwoIcon = "assets/icons/users_two.svg";
+const String landlordIcon = "assets/icons/landlord.svg";
+const String landlordTwoIcon = "assets/icons/landlord_two.svg";
+const String coinIcon = "assets/icons/coin.svg";
+const String mapPinIcon = "assets/icons/map_pin.svg";
+const String closeSquare = "assets/icons/close_square.svg";
+const String locationIcon = "assets/icons/location.svg";
+const String calendarIcon = "assets/icons/calendar.svg";
+const String personIcon = "assets/icons/person.svg";
+const String invoiceIcon = "assets/icons/invoice.svg";
+const String dotsVertIcon = "assets/icons/dots_vert.svg";
+const String logoImage = "assets/images/logo_barzaq.png";
