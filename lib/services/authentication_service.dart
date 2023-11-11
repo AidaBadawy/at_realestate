@@ -1,7 +1,9 @@
+import 'package:aisu_realestate/models/login_payload.dart';
 import 'package:aisu_realestate/models/user_model.dart';
 import 'package:aisu_realestate/services/dio_client.dart';
 import 'package:aisu_realestate/ui/common/api.url.dart';
 import 'package:aisu_realestate/utils/env.dart';
+import 'package:aisu_realestate/utils/shared_preferences.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -22,11 +24,17 @@ class AuthenticationService with ListenableServiceMixin {
   String _errorMessage = '';
   String get errorMessage => _errorMessage;
 
-  Future<bool> login() async {
+  updateUser(UserModel value) {
+    _userData.value = value;
+    notifyListeners();
+  }
+
+  Future<bool> login(LoginPayload payload) async {
     try {
       _dio = await DioClient().publicDio();
-      final response = await _dio.get(
+      final response = await _dio.post(
         "${env!.baseUrl}${RealEstateUrls.login}",
+        data: payload.toJson(),
         options: Options(
           headers: {
             'Content-Type': 'application/json',
@@ -37,6 +45,8 @@ class AuthenticationService with ListenableServiceMixin {
         Map<String, dynamic> data = response.data;
 
         _userData.value = UserModel.fromJson(data);
+
+        UserPreferences().saveUser(_userData.value);
 
         return true;
       }

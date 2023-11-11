@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:aisu_realestate/ui/common/app_colors.dart';
 import 'package:aisu_realestate/ui/common/box_text.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ButtonWidget extends StatelessWidget {
@@ -9,6 +12,8 @@ class ButtonWidget extends StatelessWidget {
   final bool isDisabled;
   final bool isBusy;
   final double height;
+  final Color? btnColor;
+  final Color? loaderColor;
   const ButtonWidget(
       {super.key,
       required this.text,
@@ -16,6 +21,8 @@ class ButtonWidget extends StatelessWidget {
       this.fontSize = 14,
       required this.isDisabled,
       required this.height,
+      this.btnColor = kcPrimaryColor,
+      this.loaderColor = kcWhiteColor,
       required this.isBusy});
 
   @override
@@ -24,12 +31,25 @@ class ButtonWidget extends StatelessWidget {
       width: double.infinity,
       child: MaterialButton(
         onPressed: isDisabled ? () {} : () => onTap(),
-        color: isDisabled ? kcLightGrey : kcPrimaryColor,
+        color: isDisabled ? kcLightGrey : btnColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
         height: height,
-        child: ManropeText.bold(text, fontSize!, kcWhiteColor),
+        child: isBusy
+            ? SizedBox(
+                height: 20,
+                width: 20,
+                child: Platform.isIOS
+                    ? CupertinoActivityIndicator(
+                        color: loaderColor,
+                      )
+                    : CircularProgressIndicator(
+                        color: loaderColor,
+                        strokeWidth: 4,
+                      ),
+              )
+            : ManropeText.semiBold(text, fontSize!, kcWhiteColor),
       ),
     );
   }

@@ -1,7 +1,10 @@
+import 'dart:io';
+
+import 'package:aisu_realestate/app/app_exports.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:stacked/stacked.dart';
-import 'package:aisu_realestate/ui/common/ui_helpers.dart';
 
 import 'startup_viewmodel.dart';
 
@@ -14,30 +17,27 @@ class StartupView extends StackedView<StartupViewModel> {
     StartupViewModel viewModel,
     Widget? child,
   ) {
-    return const Scaffold(
+    return Scaffold(
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              'Aisu Real Estate',
-              style: TextStyle(fontSize: 30, fontWeight: FontWeight.w900),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 70),
+              child: Image.asset(logoNoBg),
             ),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text('Loading ...', style: TextStyle(fontSize: 16)),
-                horizontalSpaceSmall,
-                SizedBox(
-                  width: 16,
-                  height: 16,
-                  child: CircularProgressIndicator(
-                    color: Colors.black,
-                    strokeWidth: 6,
-                  ),
-                )
-              ],
-            ),
+            verticalSpaceLarge,
+            SizedBox(
+                width: 24,
+                height: 24,
+                child: Platform.isIOS
+                    ? const CupertinoActivityIndicator(
+                        color: kcPrimaryColor,
+                      )
+                    : const CircularProgressIndicator(
+                        color: kcPrimaryColor,
+                        strokeWidth: 5,
+                      ))
           ],
         ),
       ),

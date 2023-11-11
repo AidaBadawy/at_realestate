@@ -1,3 +1,4 @@
+import 'package:aisu_realestate/services/authentication_service.dart';
 import 'package:aisu_realestate/services/listing_service.dart';
 import 'package:aisu_realestate/ui/bottom_sheets/notice/notice_sheet.dart';
 import 'package:aisu_realestate/ui/dialogs/info_alert/info_alert_dialog.dart';
@@ -40,6 +41,7 @@ import 'package:aisu_realestate/ui/views/login/login_view.dart';
     LazySingleton(classType: DialogService),
     LazySingleton(classType: NavigationService),
     LazySingleton(classType: ListingService),
+    LazySingleton(classType: AuthenticationService),
 
     // @stacked-service
   ],
