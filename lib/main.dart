@@ -16,8 +16,8 @@ Future<void> main() async {
 
   BuildEnvironment.init(
       flavor: BuildFlavor.development,
-      appName: 'Aisu Real Estate',
-      baseUrl: 'http://127.0.0.1:8090/');
+      appName: 'AT Real Estate',
+      baseUrl: 'http://10.0.2.2:8090/');
   assert(env != null);
   WidgetsFlutterBinding.ensureInitialized();
 
