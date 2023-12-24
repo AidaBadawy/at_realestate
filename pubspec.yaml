@@ -29,8 +29,12 @@ dependencies:
   # flip_card: ^0.7.0
   animate_do: ^3.1.2
   flutter_typeahead: ^4.8.0
-  flutter_expanded_tile: ^0.3.7
+  flutter_expanded_tile: ^0.3.6
   shared_preferences: ^2.2.2
+  pocketbase: ^0.16.0
+  crypto: ^3.0.3
+  carousel_slider: ^4.2.1
+  loading_animation_widget: ^1.2.0+4
 
 dev_dependencies:
   build_runner: ^2.4.5

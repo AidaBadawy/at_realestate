@@ -4,7 +4,7 @@ class LandlordModel {
   String name;
   String phone;
   String email;
-  String idNumber;
+  String? idNumber;
   List<String>? documents;
 
   LandlordModel({
@@ -13,13 +13,13 @@ class LandlordModel {
     required this.name,
     required this.phone,
     required this.email,
-    required this.idNumber,
+    this.idNumber,
     this.documents,
   });
 
   factory LandlordModel.fromJson(Map<String, dynamic> json) => LandlordModel(
-        id: json["_id"],
-        landlordNumber: json["landlord_number"],
+        id: json["id"],
+        landlordNumber: json["landlord_id"],
         name: json["name"],
         phone: json["phone"],
         email: json["email"],
@@ -27,12 +27,12 @@ class LandlordModel {
       );
 
   Map<String, dynamic> toJson() => {
-        "_id": id,
+        "id": id,
         "name": name,
         "phone": phone,
         "email": email,
         "id_number": idNumber,
-        "landlord_number": landlordNumber,
+        "landlord_id": landlordNumber,
       };
 }
 

@@ -28,20 +28,20 @@ class LandlordTabView extends StatelessWidget {
                   ManropeText.semiBold(
                       "Landlord Information", 13, kcBlackColor),
                   const Spacer(),
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      color: kcVeryLightGrey,
-                    ),
-                    child: ManropeText.bold(
-                      viewModel.appIdData.landlordNumber,
-                      13,
-                      kcBlackColor,
-                      spacing: 0.6,
-                    ),
-                  )
+                  // Container(
+                  //   padding:
+                  //       const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
+                  //   decoration: BoxDecoration(
+                  //     borderRadius: BorderRadius.circular(5),
+                  //     color: kcVeryLightGrey,
+                  //   ),
+                  //   child: ManropeText.bold(
+                  //     viewModel.appIdData.landlordNumber,
+                  //     13,
+                  //     kcBlackColor,
+                  //     spacing: 0.6,
+                  //   ),
+                  // )
                 ],
               ),
               verticalSpaceMedium,

@@ -3,13 +3,15 @@ class PropertyModel {
   String propertyNumber;
   String floor;
   String flat;
-  String room;
-  String bath;
+  int room;
+  int bath;
   String description;
   String landlordId;
+  String? tenantId;
   String apartmentId;
   int monthlyRent;
   int deposit;
+  DateTime? nextPayment;
 
   PropertyModel({
     required this.id,
@@ -21,12 +23,14 @@ class PropertyModel {
     required this.description,
     required this.landlordId,
     required this.apartmentId,
+    this.tenantId,
     required this.monthlyRent,
     required this.deposit,
+    this.nextPayment,
   });
 
   factory PropertyModel.fromJson(Map<String, dynamic> json) => PropertyModel(
-        id: json["_id"],
+        id: json["id"],
         propertyNumber: json["property_number"],
         floor: json["floor"],
         flat: json["flat"],
@@ -35,11 +39,16 @@ class PropertyModel {
         description: json["description"],
         landlordId: json["landlord_id"],
         apartmentId: json["apartment_id"],
+        tenantId: json["tenant_id"],
         monthlyRent: json["monthly_rent"],
         deposit: json["deposit"],
+        nextPayment: json["next_payment"] == ""
+            ? null
+            : DateTime.parse(json["next_payment"]),
       );
 
   Map<String, dynamic> toJson() => {
+        "id": id,
         "property_number": propertyNumber,
         "floor": floor,
         "flat": flat,
@@ -48,20 +57,24 @@ class PropertyModel {
         "description": description,
         "landlord_id": landlordId,
         "apartment_id": apartmentId,
+        "tenant_id": tenantId,
         "monthly_rent": monthlyRent,
         "deposit": deposit,
+        "next_payment": nextPayment,
       };
 }
 
 PropertyModel defaultProperty = PropertyModel(
-    id: "",
-    propertyNumber: "",
-    floor: "",
-    flat: "",
-    room: "",
-    bath: "",
-    description: "",
-    landlordId: "",
-    apartmentId: "",
-    monthlyRent: 0,
-    deposit: 1);
+  id: "",
+  propertyNumber: "",
+  floor: "",
+  flat: "",
+  room: 0,
+  bath: 0,
+  description: "",
+  landlordId: "",
+  apartmentId: "",
+  monthlyRent: 0,
+  deposit: 1,
+  nextPayment: DateTime.now(),
+);

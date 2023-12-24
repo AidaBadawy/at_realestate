@@ -12,8 +12,9 @@ class DoughnutWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SfCircularChart(
+      margin: EdgeInsets.zero,
       //  title: ChartTitle(text: 'Monthly Rent Payment'),
-      legend: Legend(isVisible: showLabel, position: LegendPosition.bottom),
+      // legend: Legend(isVisible: showLabel, position: LegendPosition.bottom),
       // tooltipBehavior: _tooltipBehavior,
       series: <CircularSeries>[
         // Renders doughnut chart

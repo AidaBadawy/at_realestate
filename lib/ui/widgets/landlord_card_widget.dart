@@ -1,9 +1,11 @@
 import 'package:aisu_realestate/app/app_exports.dart';
+import 'package:aisu_realestate/models/landlord_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class LandlordCardWidget extends StatelessWidget {
-  const LandlordCardWidget({super.key});
+  final LandlordModel landlord;
+  const LandlordCardWidget({super.key, required this.landlord});
 
   @override
   Widget build(BuildContext context) {
@@ -15,11 +17,11 @@ class LandlordCardWidget extends StatelessWidget {
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(25),
-              color: kcPrimaryColor.withOpacity(.2),
+              color: kcBlueColor.withOpacity(.2),
             ),
             child: SvgPicture.asset(
               landlordTwoIcon,
-              color: kcPrimaryColor,
+              color: kcBlueColor,
               height: 25,
             ),
           ),
@@ -35,7 +37,7 @@ class LandlordCardWidget extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         text: TextSpan(
-                          text: "Aidarus Badawy",
+                          text: landlord.name,
                           style: manropeSemiBold.copyWith(
                             color: kcBlackColor,
                             fontSize: 14,
@@ -43,7 +45,7 @@ class LandlordCardWidget extends StatelessWidget {
                         ),
                       ),
                     ),
-                    ManropeText.bold("LD-0001", 14, kcBlackColor)
+                    ManropeText.bold(landlord.landlordNumber, 14, kcBlackColor)
                   ],
                 ),
                 verticalSpaceTiny,
@@ -54,7 +56,7 @@ class LandlordCardWidget extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         text: TextSpan(
-                          text: "0701998881",
+                          text: landlord.phone,
                           style: manropeMediumFonts.copyWith(
                             color: kcBlackColor,
                             fontSize: 14,

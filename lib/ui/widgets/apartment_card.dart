@@ -36,98 +36,38 @@ class ApartmentCard extends StatelessWidget {
           ),
         ],
       ),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          color: kcPrimaryColor.withOpacity(.2),
+      child: ListTile(
+        tileColor: kcPrimaryColorHighlight,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
         ),
-        height: 100,
-        width: double.infinity,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              decoration: const BoxDecoration(
-                  color: kcPrimaryColor,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(8),
-                    bottomLeft: Radius.circular(8),
-                  )),
-              width: 10,
-              height: double.infinity,
-            ),
-            horizontalSpaceSmall,
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  verticalSpaceSmall,
-                  RichText(
-                    maxLines: 2,
-                    text: TextSpan(
-                      text: apartment.name,
-                      style: manropeBoldFonts.copyWith(
-                          color: kcBlackColor, fontSize: 16),
-                    ),
-                  ),
-                  const Spacer(),
-                  // Row(
-                  //   children: [
-                  //     SvgPicture.asset(
-                  //       locationIcon,
-                  //       height: 18,
-                  //     ),
-                  //     horizontalSpaceTiny,
-                  //     ManropeText.medium("Mombasa", 14, kcBlackColor)
-                  //   ],
-                  // ),
-                  verticalSpaceTiny,
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 2),
-                        child: SvgPicture.asset(
-                          mapPinIcon,
-                          height: 18,
-                        ),
-                      ),
-                      horizontalSpaceSmall,
-                      Expanded(
-                          child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          ManropeText.medium(apartment.city, 14, kcBlackColor),
-                          verticalSpaceTiny,
-                          ManropeText.medium(
-                              "${apartment.area}, ${apartment.street}",
-                              14,
-                              kcBlackColor)
-                        ],
-                      ))
-                    ],
-                  ),
-                  verticalSpaceSmall,
-                ],
-              ),
-            ),
-            Container(
-              margin: const EdgeInsets.only(top: 10),
-              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                color: kcWhiteColor,
-              ),
-              child: ManropeText.bold(
-                apartment.apartmentNumber,
-                13,
-                kcBlackColor,
-                spacing: 0.6,
-              ),
-            ),
-            horizontalSpaceSmall,
-          ],
+        title: ManropeText.semiBold(apartment.name, 14, kcBlackColor),
+        subtitle: RichText(
+          maxLines: 1,
+          text: TextSpan(
+              text: "${apartment.area}, ",
+              style: manropeMediumFonts.copyWith(
+                  color: kcBlackColor, fontSize: 12),
+              children: [
+                TextSpan(
+                  text: "${apartment.street}, ",
+                  style: manropeMediumFonts.copyWith(
+                      color: kcBlackColor, fontSize: 12),
+                ),
+                TextSpan(
+                  text: apartment.city,
+                  style: manropeMediumFonts.copyWith(
+                      color: kcBlackColor, fontSize: 12),
+                ),
+              ]),
+        ),
+        leading: CircleAvatar(
+          backgroundColor: kcBlueColor,
+          child: SvgPicture.asset(
+            buildingTwoIcon,
+            height: 20,
+            color: kcWhiteColor,
+          ),
         ),
       ),
     );

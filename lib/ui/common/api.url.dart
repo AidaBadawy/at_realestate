@@ -1,6 +1,6 @@
 class RealEstateUrls {
   static get appId {
-    return "api/id/";
+    return "api/collections/increments/records/";
   }
 
   static get updateSingleId {

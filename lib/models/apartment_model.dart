@@ -18,7 +18,7 @@ class ApartmentModel {
   });
 
   factory ApartmentModel.fromJson(Map<String, dynamic> json) => ApartmentModel(
-        id: json["_id"],
+        id: json["id"],
         name: json["name"],
         city: json["city"],
         area: json["area"],
@@ -28,7 +28,7 @@ class ApartmentModel {
       );
 
   Map<String, dynamic> toJson() => {
-        "_id": id,
+        "id": id,
         "name": name,
         "city": city,
         "area": area,

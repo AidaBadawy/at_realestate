@@ -2,9 +2,11 @@ import 'package:aisu_realestate/app/app.bottomsheets.dart';
 import 'package:aisu_realestate/app/app.dialogs.dart';
 import 'package:aisu_realestate/app/app.locator.dart';
 import 'package:aisu_realestate/models/sales_data.dart';
+import 'package:aisu_realestate/models/total_count_model.dart';
 import 'package:aisu_realestate/services/listing_service.dart';
 import 'package:aisu_realestate/ui/common/app_colors.dart';
 import 'package:aisu_realestate/ui/common/app_strings.dart';
+import 'package:aisu_realestate/ui/common/enums.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -12,6 +14,11 @@ class HomeViewModel extends BaseViewModel {
   final _dialogService = locator<DialogService>();
   final _bottomSheetService = locator<BottomSheetService>();
   final _listingService = locator<ListingService>();
+
+  TotalCount get totalCount => _listingService.totalCount;
+
+  StatusEnum _status = StatusEnum.idle;
+  StatusEnum get status => _status;
 
   final List<SalesData> chartData = [
     SalesData(2010, 35),
@@ -96,12 +103,21 @@ class HomeViewModel extends BaseViewModel {
   int _counter = 0;
 
   initHome() {
-    fetchAppIds();
+    // fetchAppIds();
+    fetchTotalCount();
+    // _listingService.fetchLandlordPocketBase(1, 1);
   }
 
-  fetchAppIds() {
-    _listingService.fetchAppID();
+  fetchTotalCount() async {
+    setStatus(StatusEnum.busy);
+    await _listingService.fetchTotalCount();
+
+    setStatus(StatusEnum.idle);
   }
+
+  // fetchAppIds() {
+  //   _listingService.fetchAppID();
+  // }
 
   void incrementCounter() {
     _counter++;
@@ -122,5 +138,10 @@ class HomeViewModel extends BaseViewModel {
       title: ksHomeBottomSheetTitle,
       description: ksHomeBottomSheetDescription,
     );
+  }
+
+  setStatus(StatusEnum value) {
+    _status = value;
+    notifyListeners();
   }
 }

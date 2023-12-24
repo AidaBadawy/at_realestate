@@ -21,25 +21,24 @@ class DrawerWidget extends StatelessWidget {
         children: [
           UserAccountsDrawerHeader(
             accountName: ManropeText.bold("Aidarus Badawy", 13, kcWhiteColor),
-            otherAccountsPictures: const [
-              CircleAvatar(
-                backgroundColor: kcWhiteColor,
-                backgroundImage: AssetImage(logoImage),
-              ),
-            ],
+            // otherAccountsPictures: const [
+            //   CircleAvatar(
+            //     backgroundColor: kcWhiteColor,
+            //     backgroundImage: AssetImage(logoImage),
+            //   ),
+            // ],
             accountEmail:
                 ManropeText.bold("aidarusbadawy@gmail.com", 12, kcWhiteColor),
             currentAccountPicture: const CircleAvatar(
-              backgroundImage: NetworkImage(
-                  "https://images.unsplash.com/photo-1555952517-2e8e729e0b44?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=928&q=80"),
+              backgroundColor: kcWhiteColor,
+              backgroundImage: AssetImage(logoImage),
             ),
             decoration: BoxDecoration(
               image: DecorationImage(
                 colorFilter: ColorFilter.mode(
-                  Colors.black.withOpacity(
-                      0.8), // Adjust the opacity level here (0.5 for 50% opacity)
-                  BlendMode
-                      .dstIn, // This mode combines the color with the image
+                  kcPrimaryColor
+                      .withOpacity(0.4), // Adjust the opacity of the color
+                  BlendMode.srcOver,
                 ),
                 image: const AssetImage(drawerBackground),
                 fit: BoxFit.cover,

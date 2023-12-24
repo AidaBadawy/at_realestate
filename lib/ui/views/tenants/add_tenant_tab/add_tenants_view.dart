@@ -1,6 +1,7 @@
 import 'package:aisu_realestate/ui/common/app_colors.dart';
 import 'package:aisu_realestate/ui/common/box_text.dart';
 import 'package:aisu_realestate/ui/common/ui_helpers.dart';
+import 'package:aisu_realestate/ui/views/tenants/add_tenant_tab/payment_detail_tab.dart';
 import 'package:aisu_realestate/ui/views/tenants/add_tenant_tab/property_detail_tab.dart';
 import 'package:aisu_realestate/ui/views/tenants/add_tenant_tab/tenant_detail_tab.dart';
 import 'package:aisu_realestate/ui/views/tenants/tenants_viewmodel.dart';
@@ -48,7 +49,16 @@ class AddTenantsView extends StackedView<TenantsViewModel> {
                 Expanded(
                   child: Container(
                     height: 7,
-                    color: viewModel.currentIndex > 0
+                    color: viewModel.currentIndex >= 1
+                        ? kcPrimaryColor
+                        : kcLightGrey,
+                  ),
+                ),
+                horizontalSpaceTiny,
+                Expanded(
+                  child: Container(
+                    height: 7,
+                    color: viewModel.currentIndex >= 2
                         ? kcPrimaryColor
                         : kcLightGrey,
                   ),
@@ -64,6 +74,9 @@ class AddTenantsView extends StackedView<TenantsViewModel> {
                     viewModel: viewModel,
                   ),
                   PropertyDetailTab(
+                    viewModel: viewModel,
+                  ),
+                  PaymentTenantTab(
                     viewModel: viewModel,
                   ),
                 ],

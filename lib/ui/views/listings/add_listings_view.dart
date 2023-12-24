@@ -1,5 +1,6 @@
 import 'package:aisu_realestate/ui/common/app_colors.dart';
 import 'package:aisu_realestate/ui/common/box_text.dart';
+import 'package:aisu_realestate/ui/common/enums.dart';
 import 'package:aisu_realestate/ui/common/ui_helpers.dart';
 import 'package:aisu_realestate/ui/views/listings/add_listing_tab/apartment_tab_view.dart';
 import 'package:aisu_realestate/ui/views/listings/add_listing_tab/landlord_tab_view.dart';
@@ -41,27 +42,24 @@ class AddListingsView extends StackedView<ListingsViewModel> {
                 Expanded(
                   child: Container(
                     height: 7,
-                    color: viewModel.currentIndex >= 0
-                        ? kcPrimaryColor
-                        : kcLightGrey,
+                    color:
+                        viewModel.currentIndex >= 0 ? kcBlueColor : kcLightGrey,
                   ),
                 ),
                 horizontalSpaceTiny,
                 Expanded(
                   child: Container(
                     height: 7,
-                    color: viewModel.currentIndex >= 1
-                        ? kcPrimaryColor
-                        : kcLightGrey,
+                    color:
+                        viewModel.currentIndex >= 1 ? kcBlueColor : kcLightGrey,
                   ),
                 ),
                 horizontalSpaceTiny,
                 Expanded(
                   child: Container(
                     height: 7,
-                    color: viewModel.currentIndex >= 2
-                        ? kcPrimaryColor
-                        : kcLightGrey,
+                    color:
+                        viewModel.currentIndex >= 2 ? kcBlueColor : kcLightGrey,
                   ),
                 ),
               ],
@@ -89,13 +87,12 @@ class AddListingsView extends StackedView<ListingsViewModel> {
         floatingActionButton: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
           child: ButtonWidget(
-            isBusy: false,
+            isBusy: viewModel.status == StatusEnum.busy,
             height: 50,
             isDisabled: false,
+            btnColor: kcBlueColor,
             text: viewModel.currentIndex == 2 ? "Save Listing" : "Next",
-            onTap: () => viewModel.currentIndex == 2
-                ? viewModel.uploadNewListing()
-                : viewModel.goToNext(),
+            onTap: () => viewModel.goToNext(),
           ),
         ));
   }

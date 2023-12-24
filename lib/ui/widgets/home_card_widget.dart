@@ -14,6 +14,7 @@ class HomeCardWidget extends StatelessWidget {
   final double? top;
   final double? titleFontSize;
   final double? dataFontSize;
+  final double? iconSize;
   final bool? isProperty;
   const HomeCardWidget({
     super.key,
@@ -27,6 +28,7 @@ class HomeCardWidget extends StatelessWidget {
     this.top = 0,
     this.titleFontSize = 14,
     this.dataFontSize = 20,
+    this.iconSize = 60,
     this.isProperty = false,
   });
 
@@ -72,7 +74,7 @@ class HomeCardWidget extends StatelessWidget {
             angle: 0,
             child: SvgPicture.asset(
               icon,
-              height: 60,
+              height: iconSize,
               color: iconColor.withOpacity(.3),
             ),
           ),

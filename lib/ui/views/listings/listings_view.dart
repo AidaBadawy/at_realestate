@@ -110,14 +110,20 @@ class ListingsView extends StackedView<ListingsViewModel> {
               physics: const BouncingScrollPhysics(),
               padding: const EdgeInsets.symmetric(horizontal: 20),
               itemBuilder: (context, index) {
-                return const LandlordCardWidget();
+                return InkWell(
+                  onTap: () => viewModel
+                      .navigateToinfoListing(viewModel.landlordList[index]),
+                  child: LandlordCardWidget(
+                    landlord: viewModel.landlordList[index],
+                  ),
+                );
               },
               separatorBuilder: (context, index) {
                 return const Divider(
                   thickness: 1,
                 );
               },
-              itemCount: 9,
+              itemCount: viewModel.landlordList.length,
             ),
           )
         ],

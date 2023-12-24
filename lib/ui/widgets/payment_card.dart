@@ -16,8 +16,7 @@ class PaymentCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final formatter = NumberFormat
-        .decimalPattern(); // This formatter adds thousand separators
+    final formatter = NumberFormat.decimalPattern();
 
     Color iconColor = kcPrimaryColor;
 

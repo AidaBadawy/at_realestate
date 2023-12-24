@@ -1,6 +1,7 @@
 import 'package:aisu_realestate/app/app_exports.dart';
 import 'package:aisu_realestate/models/apartment_model.dart';
 import 'package:aisu_realestate/ui/views/listings/listings_viewmodel.dart';
+import 'package:aisu_realestate/ui/widgets/button_widget.dart';
 import 'package:aisu_realestate/ui/widgets/property_card.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -24,40 +25,7 @@ class PropertyTabView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               verticalSpaceFifteen,
-              if (viewModel.newPropertyList.isNotEmpty) ...[
-                Row(
-                  children: [
-                    const Icon(Feather.info),
-                    horizontalSpaceSmall,
-                    ManropeText.semiBold("Landlord Property", 13, kcBlackColor),
-                  ],
-                ),
-                verticalSpaceSmall,
-                ListView.separated(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () {
-                          // print(viewModel.newApartmentList[index].id);
-                        },
-                        child: PropertyCard(
-                          apartment: viewModel.newPropertyList[index],
-                          delete: () {
-                            // viewModel.deleteApartment(
-                            //     viewModel.newApartmentList[index].id);
-                          },
-                        ),
-                      );
-                    },
-                    separatorBuilder: (context, index) {
-                      return const SizedBox(
-                        height: 10,
-                      );
-                    },
-                    itemCount: viewModel.newApartmentList.length),
-                verticalSpaceFifteen
-              ],
+
               Row(
                 children: [
                   const Icon(Feather.info),
@@ -102,20 +70,20 @@ class PropertyTabView extends StatelessWidget {
                   ManropeText.semiBold(
                       "Property Information", 13, kcBlackColor),
                   const Spacer(),
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      color: kcVeryLightGrey,
-                    ),
-                    child: ManropeText.bold(
-                      viewModel.currentPropertyId,
-                      13,
-                      kcBlackColor,
-                      spacing: 0.6,
-                    ),
-                  )
+                  // Container(
+                  //   padding:
+                  //       const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
+                  //   decoration: BoxDecoration(
+                  //     borderRadius: BorderRadius.circular(5),
+                  //     color: kcVeryLightGrey,
+                  //   ),
+                  //   child: ManropeText.bold(
+                  //     viewModel.currentPropertyId,
+                  //     13,
+                  //     kcBlackColor,
+                  //     spacing: 0.6,
+                  //   ),
+                  // )
                 ],
               ),
               verticalSpaceMedium,
@@ -433,22 +401,58 @@ class PropertyTabView extends StatelessWidget {
                 ],
               ),
               verticalSpaceFifteen,
-              RichText(
-                text: TextSpan(
-                    text: "+ Add Property",
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        viewModel.saveProperty();
-                      },
-                    style: manropeMediumFonts.copyWith(
-                      color: kcPrimaryColor,
-                      fontSize: 14,
-                      decoration: TextDecoration.underline,
-                    )
-                    // children: Text("data"),
-                    ),
+              // RichText(
+              //   text: TextSpan(
+              //       text: "+ Add Property",
+              //       recognizer: TapGestureRecognizer()
+              //         ..onTap = () {
+              //           viewModel.saveProperty();
+              //         },
+              //       style: manropeMediumFonts.copyWith(
+              //         color: kcPrimaryColor,
+              //         fontSize: 14,
+              //         decoration: TextDecoration.underline,
+              //       )
+              //       // children: Text("data"),
+              //       ),
+              // ),
+              ButtonWidget(
+                height: 50,
+                isBusy: false,
+                isDisabled: false,
+                text: "Add Property",
+                onTap: () => viewModel.saveProperty(),
               ),
               verticalSpaceMedium,
+              if (viewModel.newPropertyList.isNotEmpty) ...[
+                Row(
+                  children: [
+                    const Icon(Feather.info),
+                    horizontalSpaceSmall,
+                    ManropeText.semiBold("Property List", 13, kcBlackColor),
+                  ],
+                ),
+                verticalSpaceSmall,
+                ListView.separated(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return PropertyCard(
+                        property: viewModel.newPropertyList[index],
+                        delete: () {
+                          // viewModel.deleteApartment(
+                          //     viewModel.newApartmentList[index].id);
+                        },
+                      );
+                    },
+                    separatorBuilder: (context, index) {
+                      return const SizedBox(
+                        height: 10,
+                      );
+                    },
+                    itemCount: viewModel.newPropertyList.length),
+                verticalSpaceFifteen
+              ],
               verticalSpaceMedium,
               verticalSpaceMedium,
               verticalSpaceMedium,

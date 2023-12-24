@@ -9,8 +9,8 @@ UserModel userModelFromJson(String str) => UserModel.fromJson(json.decode(str));
 String userModelToJson(UserModel data) => json.encode(data.toJson());
 
 class UserModel {
-  final Record? record;
-  final String? token;
+  Record? record;
+  String? token;
 
   UserModel({
     this.record,

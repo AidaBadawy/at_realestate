@@ -1,6 +1,8 @@
 import 'package:aisu_realestate/models/user_model.dart';
 import 'package:aisu_realestate/services/authentication_service.dart';
+import 'package:aisu_realestate/services/pocketbase_service.dart';
 import 'package:aisu_realestate/utils/shared_preferences.dart';
+import 'package:pocketbase/pocketbase.dart';
 import 'package:stacked/stacked.dart';
 import 'package:aisu_realestate/app/app.locator.dart';
 import 'package:aisu_realestate/app/app.router.dart';
@@ -9,22 +11,36 @@ import 'package:stacked_services/stacked_services.dart';
 class StartupViewModel extends BaseViewModel {
   final _navigationService = locator<NavigationService>();
   final _authenticationService = locator<AuthenticationService>();
+  final _pocketBaseService = locator<PocketBaseService>();
 
   // Place anything here that needs to happen before we get into the application
   Future runStartupLogic() async {
-    String userString = await UserPreferences().getUser();
+    AsyncAuthStore asyncUser = await _pocketBaseService.isUserValid();
 
-    await Future.delayed(const Duration(seconds: 3));
+    if (asyncUser.isValid) {
+      RecordModel data = asyncUser.model;
 
-    if (userString == "") {
-      _navigationService.replaceWithLoginView();
-    } else {
-      UserModel user = userModelFromJson(userString);
-
-      _authenticationService.updateUser(user);
-
+      _authenticationService.updateUserData(data, asyncUser.token);
       _navigationService.replaceWithWrapperView();
+    } else {
+      _navigationService.replaceWithLoginView();
     }
+
+    // String userString = await UserPreferences().getUser();
+
+    // await Future.delayed(const Duration(seconds: 3));
+
+    // _navigationService.replaceWithLoginView();
+
+    // if (userString == "") {
+    //   _navigationService.replaceWithLoginView();
+    // } else {
+    //   UserModel user = userModelFromJson(userString);
+
+    //   _authenticationService.updateUser(user);
+
+    //   _navigationService.replaceWithWrapperView();
+    // }
 
     // This is where you can make decisions on where your app should navigate when
     // you have custom startup logic

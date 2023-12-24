@@ -1,15 +1,21 @@
 import 'dart:convert';
 
+import 'package:aisu_realestate/app/app.locator.dart';
 import 'package:aisu_realestate/models/apartment_model.dart';
 import 'package:aisu_realestate/models/app_id_model.dart';
 import 'package:aisu_realestate/models/landlord_model.dart';
 import 'package:aisu_realestate/models/property_model.dart';
+import 'package:aisu_realestate/models/total_count_model.dart';
+import 'package:aisu_realestate/services/authentication_service.dart';
 import 'package:aisu_realestate/services/dio_client.dart';
+import 'package:aisu_realestate/services/pocketbase_service.dart';
 import 'package:aisu_realestate/ui/common/api.url.dart';
+import 'package:aisu_realestate/ui/common/pocketbase_collection.dart';
 import 'package:aisu_realestate/utils/env.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:pocketbase/pocketbase.dart';
 import 'package:stacked/stacked.dart';
 
 class ListingService with ListenableServiceMixin {
@@ -19,18 +25,52 @@ class ListingService with ListenableServiceMixin {
     listenToReactiveValues([
       _newApartmentList,
       _apartmentList,
-      _appIdData,
+      _incrementModel,
       _newPropertyList,
       _propertyList,
       _landlordList,
-      // _events,
-      // _explore,
+      _totalLandlord,
+      _totalProperty,
+      _totalTenant,
+      _totalVacant,
+      _totalCount,
     ]);
   }
+
+  final _authenticationService = locator<AuthenticationService>();
+  final _pocketBaseService = locator<PocketBaseService>();
 
   final ReactiveValue<List<ApartmentModel>> _newApartmentList =
       ReactiveValue<List<ApartmentModel>>([]);
   List<ApartmentModel> get newApartmentList => _newApartmentList.value;
+
+  final ReactiveValue<int> _totalLandlord = ReactiveValue<int>(0);
+  int get totalLandlord => _totalLandlord.value;
+
+  final ReactiveValue<int> _totalProperty = ReactiveValue<int>(0);
+  int get totalProperty => _totalProperty.value;
+
+  final ReactiveValue<int> _totalTenant = ReactiveValue<int>(0);
+  int get totalTenant => _totalTenant.value;
+
+  final ReactiveValue<int> _totalVacant = ReactiveValue<int>(0);
+  int get totalVacant => _totalVacant.value;
+
+  final ReactiveValue<TotalCount> _totalCount =
+      ReactiveValue<TotalCount>(defaultTotalCount);
+  TotalCount get totalCount => _totalCount.value;
+
+  final ReactiveValue<List<PropertyModel>> _propertyListVacant =
+      ReactiveValue<List<PropertyModel>>([]);
+  List<PropertyModel> get propertyListVacant => _propertyListVacant.value;
+
+  final ReactiveValue<List<LandlordModel>> _landlordListVacant =
+      ReactiveValue<List<LandlordModel>>([]);
+  List<LandlordModel> get landlordListVacant => _landlordListVacant.value;
+
+  final ReactiveValue<List<ApartmentModel>> _apartmentListVacant =
+      ReactiveValue<List<ApartmentModel>>([]);
+  List<ApartmentModel> get apartmentListVacant => _apartmentListVacant.value;
 
   final ReactiveValue<List<ApartmentModel>> _apartmentList =
       ReactiveValue<List<ApartmentModel>>([
@@ -74,149 +114,22 @@ class ListingService with ListenableServiceMixin {
   List<ApartmentModel> get apartmentList => _apartmentList.value;
 
   final ReactiveValue<List<PropertyModel>> _propertyList =
-      ReactiveValue<List<PropertyModel>>([
-    PropertyModel(
-      id: "222",
-      propertyNumber: "PR-001",
-      floor: "1",
-      flat: "A1",
-      room: "2",
-      bath: "2",
-      description:
-          "Laboris do ullamco do pariatur voluptate aliquip excepteur officia.",
-      landlordId: "001",
-      apartmentId: "111",
-      monthlyRent: 20000,
-      deposit: 1,
-    ),
-    PropertyModel(
-      id: "223",
-      propertyNumber: "PR-002",
-      floor: "1",
-      flat: "B1",
-      room: "2",
-      bath: "2",
-      description:
-          "Laboris do ullamco do pariatur voluptate aliquip excepteur officia.",
-      landlordId: "001",
-      apartmentId: "111",
-      monthlyRent: 20000,
-      deposit: 1,
-    ),
-    PropertyModel(
-      id: "224",
-      propertyNumber: "PR-003",
-      floor: "1",
-      flat: "C2",
-      room: "2",
-      bath: "2",
-      description:
-          "Laboris do ullamco do pariatur voluptate aliquip excepteur officia.",
-      landlordId: "001",
-      apartmentId: "112",
-      monthlyRent: 30000,
-      deposit: 2,
-    ),
-    PropertyModel(
-      id: "225",
-      propertyNumber: "PR-004",
-      floor: "1",
-      flat: "A4",
-      room: "2",
-      bath: "2",
-      description:
-          "Laboris do ullamco do pariatur voluptate aliquip excepteur officia.",
-      landlordId: "001",
-      apartmentId: "112",
-      monthlyRent: 32000,
-      deposit: 2,
-    ),
-    PropertyModel(
-      id: "226",
-      propertyNumber: "PR-005",
-      floor: "1",
-      flat: "B1",
-      room: "2",
-      bath: "2",
-      description:
-          "Laboris do ullamco do pariatur voluptate aliquip excepteur officia.",
-      landlordId: "001",
-      apartmentId: "112",
-      monthlyRent: 44000,
-      deposit: 1,
-    ),
-    PropertyModel(
-      id: "226",
-      propertyNumber: "PR-005",
-      floor: "1",
-      flat: "B1",
-      room: "2",
-      bath: "2",
-      description:
-          "Laboris do ullamco do pariatur voluptate aliquip excepteur officia.",
-      landlordId: "001",
-      apartmentId: "112",
-      monthlyRent: 44000,
-      deposit: 1,
-    ),
-    PropertyModel(
-      id: "227",
-      propertyNumber: "PR-006",
-      floor: "1",
-      flat: "A7",
-      room: "2",
-      bath: "2",
-      description:
-          "Laboris do ullamco do pariatur voluptate aliquip excepteur officia.",
-      landlordId: "002",
-      apartmentId: "113",
-      monthlyRent: 44000,
-      deposit: 1,
-    ),
-  ]);
+      ReactiveValue<List<PropertyModel>>(
+    [],
+  );
   List<PropertyModel> get propertyList => _propertyList.value;
 
   final ReactiveValue<List<PropertyModel>> _newPropertyList =
       ReactiveValue<List<PropertyModel>>([]);
   List<PropertyModel> get newPropertyList => _newPropertyList.value;
 
-  final ReactiveValue<AppIdModel> _appIdData =
-      ReactiveValue<AppIdModel>(defaultAppIdModel);
-  AppIdModel get appIdData => _appIdData.value;
+  final ReactiveValue<IncrementModel> _incrementModel =
+      ReactiveValue<IncrementModel>(IncrementModel());
+  IncrementModel get incrementModel => _incrementModel.value;
 
   final ReactiveValue<List<LandlordModel>> _landlordList =
-      ReactiveValue<List<LandlordModel>>([
-    LandlordModel(
-        id: "001",
-        landlordNumber: "LD-001",
-        name: "Aidarus Badawy",
-        phone: "0101010101",
-        email: "aidarus@email.com",
-        idNumber: "11111"),
-    LandlordModel(
-        id: "002",
-        landlordNumber: "LD-002",
-        name: "Swaleh Alwy",
-        phone: "0101010101",
-        email: "aidarus@email.com",
-        idNumber: "11111"),
-    LandlordModel(
-        id: "003",
-        landlordNumber: "LD-003",
-        name: "Abdallah  Athman",
-        phone: "0101010101",
-        email: "abdallah@email.com",
-        idNumber: "11111"),
-  ]);
+      ReactiveValue<List<LandlordModel>>([]);
   List<LandlordModel> get landlordList => _landlordList.value;
-
-  // final ReactiveValue<CountryExploreModel> _explore =
-  //     ReactiveValue<CountryExploreModel>(defaultExplore());
-  // CountryExploreModel get explore => _explore.value;
-
-  // final ReactiveValue<CountryEventsModel> _loadedevents =
-  //     ReactiveValue<CountryEventsModel>(defaultEvent());
-  // CountryEventsModel get loadedevents => _loadedevents.value;
 
   late Dio _dio;
   String _errorMessage = '';
@@ -254,89 +167,15 @@ class ListingService with ListenableServiceMixin {
     notifyListeners();
   }
 
-  Future<bool> fetchAppID() async {
-    try {
-      _dio = await DioClient().publicDio();
-      final response = await _dio.get(
-        "${env!.baseUrl}${RealEstateUrls.appId}",
-        options: Options(
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        ),
-      );
-      if (response.statusCode == 200) {
-        Map<String, dynamic> data = response.data;
-
-        debugPrint(data.toString());
-
-        _appIdData.value = AppIdModel.fromJson(data);
-
-        // _countryList.value =
-        //     List.from(data.map<CountryModel>((e) => CountryModel.fromJson(e)));
-        return true;
-      }
-    } on DioException catch (exception) {
-      _errorMessage = exception.message.toString();
-      Fluttertoast.showToast(
-          msg: _errorMessage,
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
-    }
-
-    return false;
-  }
-
-  Future<bool> updateAppID(Map data) async {
-    try {
-      _dio = await DioClient().publicDio();
-      final response = await _dio.put(
-        "${env!.baseUrl}${RealEstateUrls.updateSingleId}${_appIdData.value.id}",
-        data: jsonEncode(data),
-        options: Options(
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        ),
-      );
-      if (response.statusCode == 200) {
-        Map<String, dynamic> data = response.data;
-
-        debugPrint(data.toString());
-
-        _appIdData.value = AppIdModel.fromJson(data);
-
-        // _countryList.value =
-        //     List.from(data.map<CountryModel>((e) => CountryModel.fromJson(e)));
-        return true;
-      }
-    } on DioException catch (exception) {
-      _errorMessage = exception.message.toString();
-      Fluttertoast.showToast(
-          msg: _errorMessage,
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
-    }
-
-    return false;
-  }
-
   Future<bool> getListings() async {
     try {
       _dio = await DioClient().publicDio();
       final response = await _dio.get(
-        "${env!.baseUrl}${RealEstateUrls.landlord}",
+        "${env!.baseUrl}api/collections/landlordFetch/records",
         options: Options(
           headers: {
             'Content-Type': 'application/json',
+            'Authorization': _authenticationService.userData.token,
           },
         ),
       );
@@ -345,8 +184,6 @@ class ListingService with ListenableServiceMixin {
 
         debugPrint(data.toString());
 
-        // _countryList.value =
-        //     List.from(data.map<CountryModel>((e) => CountryModel.fromJson(e)));
         return true;
       }
     } on DioException catch (exception) {
@@ -354,7 +191,7 @@ class ListingService with ListenableServiceMixin {
       Fluttertoast.showToast(
           msg: _errorMessage,
           toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
+          gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 1,
           backgroundColor: Colors.red,
           textColor: Colors.white,
@@ -366,200 +203,361 @@ class ListingService with ListenableServiceMixin {
 
   Future<bool> addLandlord(LandlordModel landlordModel) async {
     try {
-      _dio = await DioClient().publicDio();
-      final response = await _dio.post(
-        "${env!.baseUrl}${RealEstateUrls.addLandlord}",
-        data: landlordModel.toJson(),
-        options: Options(
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        ),
+      await _pocketBaseService.pb.collection(pbLandlord).create(
+        body: landlordModel.toJson(),
+        headers: {
+          'Authorization': _authenticationService.userData.token!,
+        },
       );
-      if (response.statusCode == 200) {
-        Map<String, dynamic> data = response.data;
 
-        debugPrint(data.toString());
-
-        // _countryList.value =
-        //     List.from(data.map<CountryModel>((e) => CountryModel.fromJson(e)));
-        return true;
-      }
-    } on DioException catch (exception) {
-      _errorMessage = exception.message.toString();
+      return true;
+    } on ClientException catch (e) {
       Fluttertoast.showToast(
-          msg: _errorMessage,
+          msg: e.response["message"],
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
+          timeInSecForIosWeb: 5,
           backgroundColor: Colors.red,
           textColor: Colors.white,
           fontSize: 16.0);
+      return false;
     }
-
-    return false;
   }
+
+  // Future<bool> addApartment(ApartmentModel apartmentModel) async {
+  //   try {
+  //     _dio = await DioClient().publicDio();
+  //     final response = await _dio.post(
+  //       "${env!.baseUrl}${RealEstateUrls.addApartment}",
+  //       data: apartmentModel.toJson(),
+  //       options: Options(
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //           'Authorization': _authenticationService.userData.token,
+  //         },
+  //       ),
+  //     );
+  //     if (response.statusCode == 200) {
+  //       Map<String, dynamic> data = response.data;
+
+  //       debugPrint(data.toString());
+
+  //       return true;
+  //     }
+  //   } on DioException catch (exception) {
+  //     _errorMessage = exception.message.toString();
+  //     Fluttertoast.showToast(
+  //         msg: _errorMessage,
+  //         toastLength: Toast.LENGTH_SHORT,
+  //         gravity: ToastGravity.CENTER,
+  //         timeInSecForIosWeb: 1,
+  //         backgroundColor: Colors.red,
+  //         textColor: Colors.white,
+  //         fontSize: 16.0);
+  //   }
+
+  //   return false;
+  // }
 
   Future<bool> addApartment(ApartmentModel apartmentModel) async {
     try {
-      _dio = await DioClient().publicDio();
-      final response = await _dio.post(
-        "${env!.baseUrl}${RealEstateUrls.addApartment}",
-        data: apartmentModel.toJson(),
-        options: Options(
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        ),
+      await _pocketBaseService.pb.collection(pbApartment).create(
+        body: apartmentModel.toJson(),
+        headers: {
+          'Authorization': _authenticationService.userData.token!,
+        },
       );
-      if (response.statusCode == 200) {
-        Map<String, dynamic> data = response.data;
 
-        debugPrint(data.toString());
-
-        // _countryList.value =
-        //     List.from(data.map<CountryModel>((e) => CountryModel.fromJson(e)));
-        return true;
-      }
-    } on DioException catch (exception) {
-      _errorMessage = exception.message.toString();
+      return true;
+    } on ClientException catch (e) {
       Fluttertoast.showToast(
-          msg: _errorMessage,
+          msg: e.response["message"],
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
+          timeInSecForIosWeb: 5,
           backgroundColor: Colors.red,
           textColor: Colors.white,
           fontSize: 16.0);
+      return false;
     }
-
-    return false;
   }
+
+  // Future<bool> addProperty(PropertyModel propertyModel) async {
+  //   try {
+  //     _dio = await DioClient().publicDio();
+  //     final response = await _dio.post(
+  //       "${env!.baseUrl}${RealEstateUrls.addProperty}",
+  //       data: propertyModel.toJson(),
+  //       options: Options(
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //           'Authorization': _authenticationService.userData.token,
+  //         },
+  //       ),
+  //     );
+  //     if (response.statusCode == 200) {
+  //       Map<String, dynamic> data = response.data;
+
+  //       debugPrint(data.toString());
+
+  //       return true;
+  //     }
+  //   } on DioException catch (exception) {
+  //     _errorMessage = exception.message.toString();
+  //     Fluttertoast.showToast(
+  //         msg: _errorMessage,
+  //         toastLength: Toast.LENGTH_SHORT,
+  //         gravity: ToastGravity.CENTER,
+  //         timeInSecForIosWeb: 1,
+  //         backgroundColor: Colors.red,
+  //         textColor: Colors.white,
+  //         fontSize: 16.0);
+  //   }
+
+  //   return false;
+  // }
 
   Future<bool> addProperty(PropertyModel propertyModel) async {
     try {
-      _dio = await DioClient().publicDio();
-      final response = await _dio.post(
-        "${env!.baseUrl}${RealEstateUrls.addProperty}",
-        data: propertyModel.toJson(),
-        options: Options(
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        ),
+      await _pocketBaseService.pb.collection(pbProperty).create(
+        body: propertyModel.toJson(),
+        headers: {
+          'Authorization': _authenticationService.userData.token!,
+        },
       );
-      if (response.statusCode == 200) {
-        Map<String, dynamic> data = response.data;
 
-        debugPrint(data.toString());
-
-        // _countryList.value =
-        //     List.from(data.map<CountryModel>((e) => CountryModel.fromJson(e)));
-        return true;
-      }
-    } on DioException catch (exception) {
-      _errorMessage = exception.message.toString();
+      return true;
+    } on ClientException catch (e) {
       Fluttertoast.showToast(
-          msg: _errorMessage,
+          msg: e.response["message"],
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
+          timeInSecForIosWeb: 5,
           backgroundColor: Colors.red,
           textColor: Colors.white,
           fontSize: 16.0);
+      return false;
     }
-
-    return false;
   }
 
-  // Future<bool> getEvents() async {
-  //   try {
-  //     _dio = await DioClient().publicDio();
-  //     final response = await _dio.get(
-  //       "${env!.baseUrl}${CountryUrls.events}${country.id}",
-  //       options: Options(
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //         },
-  //       ),
-  //     );
-  //     if (response.statusCode == 200) {
-  //       Map<String, dynamic> data = response.data;
+  final pb = PocketBase(env!.baseUrl);
 
-  //       _events.value = CountryEventsModel.fromJson(data);
-  //       _loadedevents.value = CountryEventsModel.fromJson(data);
-  //       return true;
-  //     }
-  //   } on DioException catch (exception) {
-  //     _errorMessage = exception.response!.statusMessage.toString();
-  //     Fluttertoast.showToast(
-  //         msg: _errorMessage,
-  //         toastLength: Toast.LENGTH_SHORT,
-  //         gravity: ToastGravity.CENTER,
-  //         timeInSecForIosWeb: 1,
-  //         backgroundColor: Colors.red,
-  //         textColor: Colors.white,
-  //         fontSize: 16.0);
-  //   }
+  fetchLandlordPocketBase(int page, int total) async {
+    final resultList = await pb.collection('landlord').getList(
+      page: page,
+      perPage: total,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': _authenticationService.userData.token!,
+      },
+    );
+  }
 
-  //   // throw exception;
-  //   return false;
+  fetchTenantPocketBase(int page, int total) async {
+    final resultList = await pb.collection('tenants').getList(
+      page: page,
+      perPage: total,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': _authenticationService.userData.token!,
+      },
+    );
 
-  //   // ShowToast().cancelToast(context, title: _errorMessage!);
+    print(resultList);
+  }
 
-  //   // print('$_errorMessage deleteSelectedFood');
-  //   // FreelanceAlert().alert(
-  //   //   context,
-  //   //   title: str_error_occured,
-  //   //   body: _errorMessage!,
-  //   //   buttonTitle: str_okay,
-  //   // );
-  //   // return false;
-  // }
+  fetchPropertyPocketBase(int page, int total) async {
+    final resultList = await pb.collection('property').getList(
+      page: page,
+      perPage: total,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': _authenticationService.userData.token!,
+      },
+    );
 
-  // Future<bool> getExplore() async {
-  //   _explore.value.explore = [];
-  //   try {
-  //     _dio = await DioClient().publicDio();
-  //     final response = await _dio.get(
-  //       "${env!.baseUrl}${CountryUrls.explore}${country.id}",
-  //       options: Options(
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //         },
-  //       ),
-  //     );
-  //     if (response.statusCode == 200) {
-  //       Map<String, dynamic> data = response.data;
+    print(resultList);
+  }
 
-  //       _explore.value = CountryExploreModel.fromJson(data);
-  //       notifyListeners();
-  //       return true;
-  //     }
-  //   } on DioException catch (exception) {
-  //     _errorMessage = exception.response!.statusMessage.toString();
-  //     Fluttertoast.showToast(
-  //         msg: _errorMessage,
-  //         toastLength: Toast.LENGTH_SHORT,
-  //         gravity: ToastGravity.CENTER,
-  //         timeInSecForIosWeb: 1,
-  //         backgroundColor: Colors.red,
-  //         textColor: Colors.white,
-  //         fontSize: 16.0);
-  //   }
+  Future<bool> fetchTotalCount() async {
+    try {
+      final totalPocket =
+          await _pocketBaseService.pb.collection(pbTotalCount).getFullList(
+        headers: {
+          'Authorization': _authenticationService.userData.token!,
+        },
+      );
 
-  //   // throw exception;
-  //   return false;
+      if (totalPocket.isNotEmpty) {
+        _totalCount.value = TotalCount.fromJson(totalPocket.first.toJson());
 
-  //   // ShowToast().cancelToast(context, title: _errorMessage!);
+        return true;
+      }
 
-  //   // print('$_errorMessage deleteSelectedFood');
-  //   // FreelanceAlert().alert(
-  //   //   context,
-  //   //   title: str_error_occured,
-  //   //   body: _errorMessage!,
-  //   //   buttonTitle: str_okay,
-  //   // );
-  //   // return false;
-  // }
+      return true;
+    } on ClientException catch (e) {
+      Fluttertoast.showToast(
+          msg: e.response["message"],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 5,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+      return false;
+    }
+  }
+
+  Future<bool> fetchTotalLandlord() async {
+    try {
+      final totalPocket =
+          await _pocketBaseService.pb.collection(pbLandlord).getFullList(
+        headers: {
+          'Authorization': _authenticationService.userData.token!,
+        },
+      );
+
+      if (totalPocket.isNotEmpty) {
+        _landlordList.value = List.from(totalPocket
+            .map<LandlordModel>((e) => LandlordModel.fromJson(e.toJson())));
+
+        return true;
+      }
+
+      return true;
+    } on ClientException catch (e) {
+      Fluttertoast.showToast(
+          msg: e.response["message"],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 5,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+      return false;
+    }
+  }
+
+  Future<bool> fetchIncrement() async {
+    try {
+      final incrementPocket =
+          await _pocketBaseService.pb.collection(pbIncrements).getFullList(
+        headers: {
+          'Authorization': _authenticationService.userData.token!,
+        },
+      );
+
+      if (incrementPocket.isNotEmpty) {
+        _incrementModel.value =
+            IncrementModel.fromJson(incrementPocket.first.toJson());
+        // _incrementModel.value.id = incrementPocket.first.id;
+        return true;
+      }
+
+      return true;
+    } on ClientException catch (e) {
+      Fluttertoast.showToast(
+          msg: e.response["message"],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 5,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+      return false;
+    }
+  }
+
+  Future<bool> updateIncrement(IncrementModel incrementModel) async {
+    try {
+      await _pocketBaseService.pb.collection(pbIncrements).update(
+        _incrementModel.value.id!,
+        body: incrementModel.toJson(),
+        headers: {
+          'Authorization': _authenticationService.userData.token!,
+        },
+      );
+
+      return true;
+    } on ClientException catch (e) {
+      Fluttertoast.showToast(
+          msg: e.response["message"],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 5,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+      return false;
+    }
+  }
+
+  Future<bool> updateProperty(
+      String propertyId, PropertyModel propertyModel) async {
+    try {
+      await _pocketBaseService.pb.collection(pbProperty).update(
+        propertyId,
+        body: propertyModel.toJson(),
+        headers: {
+          'Authorization': _authenticationService.userData.token!,
+        },
+      );
+
+      return true;
+    } on ClientException catch (e) {
+      Fluttertoast.showToast(
+          msg: e.response["message"],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 5,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+      return false;
+    }
+  }
+
+  Future<bool> fetchProperties() async {
+    try {
+      final propertyPocket =
+          await _pocketBaseService.pb.collection(pbProperty).getFullList(
+        filter: 'tenant = ""',
+        expand: "landlord_id, apartment_id",
+        headers: {
+          'Authorization': _authenticationService.userData.token!,
+        },
+      );
+
+      if (propertyPocket.isNotEmpty) {
+        var landlordMap =
+            propertyPocket.map((e) => e.expand["landlord_id"]!.first);
+
+        var apartmentMap =
+            propertyPocket.map((e) => e.expand["apartment_id"]!.first);
+
+        _propertyListVacant.value = List<PropertyModel>.from(propertyPocket
+            .map<PropertyModel>((e) => PropertyModel.fromJson(e.toJson())));
+
+        _landlordListVacant.value = List.from(landlordMap
+            .map<LandlordModel>((e) => LandlordModel.fromJson(e.toJson())));
+
+        _apartmentListVacant.value = List.from(apartmentMap
+            .map<ApartmentModel>((e) => ApartmentModel.fromJson(e.toJson())));
+
+        return true;
+      }
+
+      return true;
+    } on ClientException catch (e) {
+      Fluttertoast.showToast(
+          msg: e.response["message"],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 5,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+      return false;
+    }
+  }
 }

@@ -1,10 +1,12 @@
 import 'package:aisu_realestate/app/app_exports.dart';
 import 'package:aisu_realestate/ui/views/listings/listings_viewmodel.dart';
 import 'package:aisu_realestate/ui/widgets/apartment_card.dart';
-// import 'package:aisu_realestate/ui/widgets/apartment_card.dart';
-import 'package:animate_do/animate_do.dart';
+import 'package:aisu_realestate/ui/widgets/button_widget.dart';
+import 'package:aisu_realestate/ui/widgets/property_card.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 class ApartmentTabView extends StatelessWidget {
@@ -23,202 +25,13 @@ class ApartmentTabView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               verticalSpaceFifteen,
-              if (viewModel.newApartmentList.isNotEmpty) ...[
-                Row(
-                  children: [
-                    const Icon(Feather.info),
-                    horizontalSpaceSmall,
-                    ManropeText.semiBold(
-                        "Landlord Apartment", 13, kcBlackColor),
-                  ],
-                ),
-                verticalSpaceSmall,
-                SizedBox(
-                  // height: 120,
-                  child: ListView.separated(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      scrollDirection: Axis.vertical,
-                      itemBuilder: (context, index) {
-                        return InkWell(
-                          onTap: () {
-                            // print(viewModel.newApartmentList[index].id);
-                          },
-                          child: ApartmentCard(
-                            apartment: viewModel.newApartmentList[index],
-                            delete: () {
-                              viewModel.deleteApartment(
-                                  viewModel.newApartmentList[index].id);
-                            },
-                          ),
-                          // child: Container(
-                          //   decoration: BoxDecoration(
-                          //     borderRadius: BorderRadius.circular(10),
-                          //     color: Colors.red,
-                          //   ),
-                          //   height: 70,
-                          //   width: 150,
-                          //   child: Column(children: [
-                          //     ManropeText.semiBold("AP-0001", 14, kcWhiteColor)
-                          //   ]),
-                          // ),
-                        );
-                      },
-                      separatorBuilder: (context, index) {
-                        return const SizedBox(
-                          width: 10,
-                        );
-                      },
-                      itemCount: viewModel.newApartmentList.length),
-                ),
-                verticalSpaceSmall,
-                SizedBox(
-                  height: 130,
-                  child: ListView.separated(
-                      // physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                          onTap: () {
-                            viewModel.setAnimate();
-                            viewModel.setSelectedId(viewModel.selectedId == ""
-                                ? viewModel.newApartmentList[index].id
-                                : "");
-                          },
-                          child: Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              SizedBox(
-                                width: 200,
-                                child: Row(children: [
-                                  Expanded(
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: kcPrimaryColor.withOpacity(.2),
-                                      ),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          ManropeText.semiBold(
-                                              "Apartment Information",
-                                              13,
-                                              kcBlackColor)
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ]),
-                              ),
-                              if (viewModel.selectedId ==
-                                  viewModel.newApartmentList[index].id) ...[
-                                Positioned.fill(
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color:
-                                          const Color.fromARGB(100, 22, 44, 33),
-                                    ),
-                                  ),
-                                ),
-                                Positioned(
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: <Widget>[
-                                      FadeInLeft(
-                                        animate: viewModel.animate,
-                                        child: InkWell(
-                                          splashColor: Colors.red.shade200,
-                                          borderRadius:
-                                              BorderRadius.circular(50),
-                                          onTap: () {},
-                                          child: Container(
-                                            padding: const EdgeInsets.all(8),
-                                            decoration: BoxDecoration(
-                                              color: kcWhiteColor,
-                                              borderRadius:
-                                                  BorderRadius.circular(50),
-                                              border: Border.all(
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                            child: const Icon(
-                                              Icons.delete,
-                                              size: 18,
-                                              color: Colors.red,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      horizontalSpaceSmall,
-                                      FadeInRight(
-                                        animate: viewModel.animate,
-                                        child: InkWell(
-                                          splashColor: Colors.blue.shade200,
-                                          borderRadius:
-                                              BorderRadius.circular(50),
-                                          onTap: () {},
-                                          child: Container(
-                                            padding: const EdgeInsets.all(8),
-                                            decoration: BoxDecoration(
-                                              color: kcWhiteColor,
-                                              borderRadius:
-                                                  BorderRadius.circular(50),
-                                              border: Border.all(
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                            child: const Icon(
-                                              Icons.edit,
-                                              size: 18,
-                                              color: Colors.blue,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ]
-                            ],
-                          ),
-                        );
-                      },
-                      separatorBuilder: (context, index) {
-                        return const SizedBox(
-                          width: 10,
-                        );
-                      },
-                      itemCount: viewModel.newApartmentList.length),
-                ),
-                verticalSpaceFifteen
-              ],
+
               Row(
                 children: [
                   const Icon(Feather.info),
                   horizontalSpaceSmall,
                   ManropeText.semiBold(
                       "Apartment Information", 13, kcBlackColor),
-                  const Spacer(),
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      color: kcVeryLightGrey,
-                    ),
-                    child: ManropeText.bold(
-                      viewModel.currentApartmentId,
-                      13,
-                      kcBlackColor,
-                      spacing: 0.6,
-                    ),
-                  )
                 ],
               ),
               verticalSpaceMedium,
@@ -408,20 +221,93 @@ class ApartmentTabView extends StatelessWidget {
                 ],
               ),
               verticalSpaceFifteen,
-              RichText(
-                text: TextSpan(
-                    text: "+ Add Apartment",
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        viewModel.addApartment();
-                      },
-                    style: manropeMediumFonts.copyWith(
-                      color: kcPrimaryColor,
-                      fontSize: 14,
-                      decoration: TextDecoration.underline,
-                    )),
+              ButtonWidget(
+                height: 50,
+                isBusy: false,
+                isDisabled: false,
+                text: "Add Apartment",
+                onTap: () => viewModel.addApartment(),
               ),
+              // RichText(
+              //   text: TextSpan(
+              //       text: "+ Add Apartment",
+              //       recognizer: TapGestureRecognizer()
+              //         ..onTap = () {
+              //           viewModel.addApartment();
+              //         },
+              //       style: manropeMediumFonts.copyWith(
+              //         color: kcPrimaryColor,
+              //         fontSize: 14,
+              //         decoration: TextDecoration.underline,
+              //       )),
+              // ),
               verticalSpaceMedium,
+              if (viewModel.newApartmentList.isNotEmpty) ...[
+                Row(
+                  children: [
+                    const Icon(Feather.info),
+                    horizontalSpaceSmall,
+                    ManropeText.semiBold("Apartment List", 13, kcBlackColor),
+                  ],
+                ),
+                verticalSpaceMedium,
+                ListView.separated(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return ApartmentCard(
+                        apartment: viewModel.newApartmentList[index],
+                        delete: () {},
+                      );
+                    },
+                    separatorBuilder: (context, index) => verticalSpaceSmall,
+                    itemCount: viewModel.newApartmentList.length),
+                // ExpandedTileList.separated(
+                //   separatorBuilder: (context, index) {
+                //     return verticalSpaceSmall;
+                //   },
+                //   itemCount: viewModel.newApartmentList.length,
+                //   maxOpened: 1,
+                //   reverse: true,
+                //   itemBuilder: (context, index, controller) {
+                //     return ExpandedTile(
+                //       theme: const ExpandedTileThemeData(
+                //         headerColor: kcPrimaryColorHighlight,
+                //         headerRadius: 10.0,
+                //         headerPadding: EdgeInsets.all(24.0),
+                //         headerSplashColor: kcBlueColor,
+                //         contentBackgroundColor: kcWhiteColor,
+                //         contentPadding: EdgeInsets.symmetric(vertical: 10),
+                //         contentRadius: 10.0,
+                //       ),
+                //       contentseparator: 10,
+                //       controller: controller.copyWith(),
+                //       title: RichText(
+                //         maxLines: 1,
+                //         overflow: TextOverflow.ellipsis,
+                //         text: TextSpan(
+                //           text: viewModel.newApartmentList[index].name,
+                //           style: manropeBoldFonts.copyWith(
+                //             color: kcBlackColor,
+                //             fontSize: 16,
+                //           ),
+                //         ),
+                //       ),
+                //       content: Container(
+                //         padding: const EdgeInsets.symmetric(
+                //             vertical: 10, horizontal: 10),
+                //         decoration: BoxDecoration(
+                //           borderRadius: BorderRadius.circular(10),
+                //           border: Border.all(
+                //             color: kcLightGrey,
+                //           ),
+                //         ),
+                //       ),
+                //     );
+                //   },
+                // ),
+                verticalSpaceSmall,
+              ],
               verticalSpaceMedium,
               verticalSpaceMedium,
             ],

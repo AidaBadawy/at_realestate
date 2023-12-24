@@ -1,5 +1,6 @@
 import 'package:aisu_realestate/app/app.locator.dart';
 import 'package:aisu_realestate/app/app.router.dart';
+import 'package:aisu_realestate/app/app_exports.dart';
 import 'package:aisu_realestate/models/login_payload.dart';
 import 'package:aisu_realestate/services/authentication_service.dart';
 import 'package:aisu_realestate/ui/common/enums.dart';
@@ -60,9 +61,19 @@ class LoginViewModel extends FormViewModel {
       setStatus(StatusEnum.busy);
       LoginPayload payload =
           LoginPayload(identity: emailValue!, password: passwordValue!);
-      bool isLogin = await _authenticationService.login(payload);
+      bool isLogin = await _authenticationService.loginPocket(payload);
 
       if (isLogin) {
+        ScaffoldMessenger.of(StackedService.navigatorKey!.currentContext!)
+            .showSnackBar(
+          SnackBar(
+            content: ManropeText.medium(
+                "Login Success. Redirecting...", 14, kcWhiteColor),
+            duration: const Duration(seconds: 2),
+            backgroundColor: kcGreenColor,
+          ),
+        );
+        await Future.delayed(const Duration(seconds: 2));
         _navigationService.replaceWithWrapperView();
       }
 

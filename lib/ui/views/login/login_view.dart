@@ -232,6 +232,8 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
   @override
   void onViewModelReady(LoginViewModel viewModel) {
     syncFormWithViewModel(viewModel);
+    emailController.text = "aidarusbadawy@gmail.com";
+    passwordController.text = "Badawy@123";
     super.onViewModelReady(viewModel);
   }
 

@@ -20,3 +20,7 @@ const String logoWhite = "assets/images/logo_white.png";
 const String bgHome = "assets/images/bg_home.jpeg";
 const String eye = "assets/icons/eye.svg";
 const String eyeOff = "assets/icons/eye_off.svg";
+const String trashIcon = "assets/icons/trash.svg";
+const String bedIcon = "assets/icons/bed.svg";
+const String bathIcon = "assets/icons/bath.svg";
+const String flatIcon = "assets/icons/flat.svg";

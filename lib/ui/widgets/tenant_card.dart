@@ -17,11 +17,11 @@ class TenantCard extends StatelessWidget {
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(25),
-              color: kcPrimaryColor.withOpacity(.2),
+              color: kcBlueColor.withOpacity(.2),
             ),
             child: SvgPicture.asset(
               personIcon,
-              color: kcPrimaryColor,
+              color: kcBlueColor,
             ),
           ),
           horizontalSpaceSmall,
