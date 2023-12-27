@@ -22,8 +22,6 @@ class HomeView extends StackedView<HomeViewModel> {
     HomeViewModel viewModel,
     Widget? child,
   ) {
-    // Size size = MediaQuery.of(context).size;
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -42,6 +40,25 @@ class HomeView extends StackedView<HomeViewModel> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      verticalSpaceFifteen,
+                      RichText(
+                        text: TextSpan(
+                          text: "Hello, ",
+                          style: manropeRegularFonts.copyWith(
+                            color: kcBlackColor,
+                            fontSize: 24,
+                          ),
+                          children: [
+                            TextSpan(
+                              text: viewModel.userModel.record!.name,
+                              style: manropeMediumFonts.copyWith(
+                                color: kcBlackColor,
+                                fontSize: 24,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                       verticalSpaceFifteen,
                       Row(
                         children: [
@@ -104,23 +121,10 @@ class HomeView extends StackedView<HomeViewModel> {
                           )
                         ],
                       ),
-
-                      // SfCartesianChart(
-                      //     // primaryXAxis: DateTimeAxis(),
-                      //     series: <ChartSeries>[
-                      //       // Renders line chart
-                      //       LineSeries<SalesData, int>(
-                      //           dataSource: viewModel.chartData,
-                      //           xValueMapper: (SalesData sales, _) => sales.year,
-                      //           yValueMapper: (SalesData sales, _) => sales.sales)
-                      //     ])
                     ],
                   ),
                 ),
               ),
-              // const SliverToBoxAdapter(
-              //   child: verticalSpaceMedium,
-              // ),
               SliverToBoxAdapter(
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20),

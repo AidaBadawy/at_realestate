@@ -24,3 +24,4 @@ const String trashIcon = "assets/icons/trash.svg";
 const String bedIcon = "assets/icons/bed.svg";
 const String bathIcon = "assets/icons/bath.svg";
 const String flatIcon = "assets/icons/flat.svg";
+const String emptyLottie = "assets/json/empty_list.json";

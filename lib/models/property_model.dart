@@ -1,3 +1,5 @@
+import 'package:aisu_realestate/models/tenant_model.dart';
+
 class PropertyModel {
   String id;
   String propertyNumber;
@@ -12,6 +14,7 @@ class PropertyModel {
   int monthlyRent;
   int deposit;
   DateTime? nextPayment;
+  TenantModel? tenantModel;
 
   PropertyModel({
     required this.id,
@@ -27,25 +30,28 @@ class PropertyModel {
     required this.monthlyRent,
     required this.deposit,
     this.nextPayment,
+    this.tenantModel,
   });
 
   factory PropertyModel.fromJson(Map<String, dynamic> json) => PropertyModel(
-        id: json["id"],
-        propertyNumber: json["property_number"],
-        floor: json["floor"],
-        flat: json["flat"],
-        room: json["room"],
-        bath: json["bath"],
-        description: json["description"],
-        landlordId: json["landlord_id"],
-        apartmentId: json["apartment_id"],
-        tenantId: json["tenant_id"],
-        monthlyRent: json["monthly_rent"],
-        deposit: json["deposit"],
-        nextPayment: json["next_payment"] == ""
-            ? null
-            : DateTime.parse(json["next_payment"]),
-      );
+      id: json["id"],
+      propertyNumber: json["property_number"],
+      floor: json["floor"],
+      flat: json["flat"],
+      room: json["room"],
+      bath: json["bath"],
+      description: json["description"],
+      landlordId: json["landlord_id"],
+      apartmentId: json["apartment_id"],
+      tenantId: json["tenant"],
+      monthlyRent: json["monthly_rent"],
+      deposit: json["deposit"],
+      nextPayment: json["next_payment"] == ""
+          ? null
+          : DateTime.parse(json["next_payment"]),
+      tenantModel: json["expand"]["tenant"] == null
+          ? null
+          : TenantModel.fromJson(json["expand"]["tenant"]));
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -57,7 +63,7 @@ class PropertyModel {
         "description": description,
         "landlord_id": landlordId,
         "apartment_id": apartmentId,
-        "tenant_id": tenantId,
+        "tenant": tenantId,
         "monthly_rent": monthlyRent,
         "deposit": deposit,
         "next_payment": nextPayment,

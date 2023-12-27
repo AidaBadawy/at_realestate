@@ -3,6 +3,9 @@ import 'package:aisu_realestate/app/app.dialogs.dart';
 import 'package:aisu_realestate/app/app.locator.dart';
 import 'package:aisu_realestate/models/sales_data.dart';
 import 'package:aisu_realestate/models/total_count_model.dart';
+import 'package:aisu_realestate/models/user_model.dart';
+
+import 'package:aisu_realestate/services/authentication_service.dart';
 import 'package:aisu_realestate/services/listing_service.dart';
 import 'package:aisu_realestate/ui/common/app_colors.dart';
 import 'package:aisu_realestate/ui/common/app_strings.dart';
@@ -10,10 +13,13 @@ import 'package:aisu_realestate/ui/common/enums.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
-class HomeViewModel extends BaseViewModel {
+class HomeViewModel extends ReactiveViewModel {
   final _dialogService = locator<DialogService>();
   final _bottomSheetService = locator<BottomSheetService>();
   final _listingService = locator<ListingService>();
+  final _authService = locator<AuthenticationService>();
+
+  UserModel get userModel => _authService.userData;
 
   TotalCount get totalCount => _listingService.totalCount;
 
@@ -144,4 +150,8 @@ class HomeViewModel extends BaseViewModel {
     _status = value;
     notifyListeners();
   }
+
+  @override
+  List<ListenableServiceMixin> get listenableServices =>
+      [_listingService, _authService];
 }
