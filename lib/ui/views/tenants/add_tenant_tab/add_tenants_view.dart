@@ -1,5 +1,6 @@
 import 'package:aisu_realestate/ui/common/app_colors.dart';
 import 'package:aisu_realestate/ui/common/box_text.dart';
+import 'package:aisu_realestate/ui/common/enums.dart';
 import 'package:aisu_realestate/ui/common/ui_helpers.dart';
 import 'package:aisu_realestate/ui/views/tenants/add_tenant_tab/payment_detail_tab.dart';
 import 'package:aisu_realestate/ui/views/tenants/add_tenant_tab/property_detail_tab.dart';
@@ -89,7 +90,7 @@ class AddTenantsView extends StackedView<TenantsViewModel> {
           padding: const EdgeInsets.symmetric(horizontal: 15),
           child: ButtonWidget(
             height: 50,
-            isBusy: false,
+            isBusy: viewModel.status == StatusEnum.busy,
             isDisabled: false,
             text: "Next",
             onTap: () => viewModel.goToNext(),

@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:aisu_realestate/app/app.bottomsheets.dart';
 import 'package:aisu_realestate/app/app.locator.dart';
 import 'package:aisu_realestate/app/app.router.dart';
+import 'package:aisu_realestate/app/app_exports.dart';
 import 'package:aisu_realestate/models/apartment_model.dart';
 import 'package:aisu_realestate/models/app_id_model.dart';
 import 'package:aisu_realestate/models/document_model.dart';
@@ -26,8 +27,18 @@ class TenantsViewModel extends ReactiveViewModel {
 
   IncrementModel get appIdData => _listingService.incrementModel;
 
+  List<TenantModel> get tenantList => _tenantService.tenantList;
+
   StatusEnum _status = StatusEnum.idle;
   StatusEnum get status => _status;
+
+  DateTime? _selectedDate = DateTime.now();
+
+  final formKeys = {
+    0: GlobalKey<FormState>(),
+    1: GlobalKey<FormState>(),
+    2: GlobalKey<FormState>(),
+  };
 
   List<String> pageTitles = [
     "Tenant Details",
@@ -57,6 +68,9 @@ class TenantsViewModel extends ReactiveViewModel {
   ApartmentModel _selectedApartment = defaultApartmentModel;
   ApartmentModel get selectedApartment => _selectedApartment;
 
+  final TenantModel _tenantPayload = TenantModel();
+  TenantModel get tenantPayload => _tenantPayload;
+
   PropertyModel _selectedProperty = defaultProperty;
   PropertyModel get selectedProperty => _selectedProperty;
 
@@ -70,6 +84,10 @@ class TenantsViewModel extends ReactiveViewModel {
   List<DocumentModel> get documentsList => _documentsList;
 
   int _documentId = 1;
+
+  initTenantView() {
+    fetchTenant();
+  }
 
   initAddListing() {
     _pageController = PageController(initialPage: 0);
@@ -131,12 +149,26 @@ class TenantsViewModel extends ReactiveViewModel {
   }
 
   goToNext() {
-    if (_currentIndex < pageTitles.length - 1) {
-      _currentIndex++;
+    if (_currentIndex == 0) {
+      if (formKeys[_currentIndex]!.currentState!.validate()) {
+        String tenantId = generateRandomId();
 
-      _pageController.animateToPage(_currentIndex,
-          duration: const Duration(microseconds: 400), curve: Curves.easeIn);
-    } else {}
+        _tenantPayload.id = tenantId;
+
+        _currentIndex++;
+
+        _pageController.animateToPage(_currentIndex,
+            duration: const Duration(microseconds: 400), curve: Curves.easeIn);
+      }
+    } else if (_currentIndex == 1) {
+      if (_selectedProperty.id != "") {
+        _currentIndex++;
+        _pageController.animateToPage(_currentIndex,
+            duration: const Duration(microseconds: 400), curve: Curves.easeIn);
+      }
+    } else {
+      saveTenant();
+    }
 
     notifyListeners();
   }
@@ -182,8 +214,34 @@ class TenantsViewModel extends ReactiveViewModel {
     }
   }
 
-  saveTenant(name, email, phone, idNumber) async {
-    // if (tenantKey.currentState!.validate()) {
+  onChangedTenant(String value, String key) {
+    switch (key) {
+      case "name":
+        _tenantPayload.name = value;
+        break;
+      case "phone":
+        _tenantPayload.phone = value;
+        break;
+      case "email":
+        _tenantPayload.email = value;
+        break;
+      case "id_number":
+        _tenantPayload.idNumber = value;
+        break;
+      case "rent":
+        _tenantPayload.rentPayment = int.parse(value);
+        break;
+      case "date":
+        _tenantPayload.lastPayment = DateTime.parse(value);
+        notifyListeners();
+
+        break;
+      default:
+    }
+    notifyListeners();
+  }
+
+  saveTenant() async {
     setStatus(StatusEnum.busy);
     await _listingService.fetchIncrement();
 
@@ -198,18 +256,18 @@ class TenantsViewModel extends ReactiveViewModel {
         "TE-${newLandlordId.toString().padLeft(splitLandlord.last.length, "0")}";
 
     TenantModel tenantModel = TenantModel(
-      name: name,
-      email: email,
-      idNumber: idNumber,
-      phone: phone,
+      name: _tenantPayload.name,
+      email: _tenantPayload.email,
+      idNumber: _tenantPayload.idNumber,
+      phone: _tenantPayload.phone,
+      rentPayment: _tenantPayload.rentPayment,
       id: tenantId,
       tenantNumber: tenantNumber,
       landlord: _selectedLandlord.id,
       property: _selectedProperty.id,
       balancePayment: 0,
-      // lastPayment: _selectedDate,
-      pendingPayment:
-          (_selectedProperty.monthlyRent * _selectedProperty.deposit),
+      lastPayment: _tenantPayload.lastPayment,
+      pendingPayment: (_tenantPayload.rentPayment! * _selectedProperty.deposit),
     );
 
     bool tenantAdded = await _tenantService.addTenant(tenantModel);
@@ -219,13 +277,24 @@ class TenantsViewModel extends ReactiveViewModel {
       incrementModelUpdate.tenantNumber = tenantNumber;
       await _listingService.updateIncrement(incrementModelUpdate);
 
-      PropertyModel? propertyModel = _selectedProperty;
-      propertyModel.tenantId = tenantId;
+      _selectedProperty.tenantId = tenantId;
 
-      await _listingService.updateProperty(propertyModel.id, propertyModel);
+      await _listingService.updateProperty(
+          _selectedProperty.id, _selectedProperty);
 
       await Future.delayed(const Duration(seconds: 2)).whenComplete(() {
+        ScaffoldMessenger.of(StackedService.navigatorKey!.currentContext!)
+            .showSnackBar(
+          SnackBar(
+            content:
+                ManropeText.medium("Tenant Added Successful", 14, kcWhiteColor),
+            duration: const Duration(seconds: 2),
+            backgroundColor: kcGreenColor,
+          ),
+        );
         fetchTenant();
+
+        _navigationService.back();
       });
       setStatus(StatusEnum.idle);
     }
@@ -267,6 +336,8 @@ class TenantsViewModel extends ReactiveViewModel {
 
   setSelectedFlat(PropertyModel value) {
     _selectedProperty = value;
+    onChangedTenant(value.monthlyRent.toString(), 'rent');
+    onChangedTenant(DateTime.now().toIso8601String(), 'date');
     notifyListeners();
   }
 
@@ -275,6 +346,38 @@ class TenantsViewModel extends ReactiveViewModel {
     notifyListeners();
   }
 
+  Future<DateTime?> selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(2000),
+        lastDate: DateTime(2101),
+        builder: (context, child) {
+          return Theme(
+            data: Theme.of(context).copyWith(
+              colorScheme: const ColorScheme.light(
+                primary: kcPrimaryColor, // header background color
+                onPrimary: kcWhiteColor, // header text color
+                onSurface: kcBlackColor, // body text color
+              ),
+              textButtonTheme: TextButtonThemeData(
+                style: TextButton.styleFrom(
+                  foregroundColor: kcBlackColor, // button text color
+                ),
+              ),
+            ),
+            child: child!,
+          );
+        });
+
+    if (picked != null) {
+      _selectedDate = picked;
+    }
+    notifyListeners();
+    return picked;
+  }
+
   @override
-  List<ListenableServiceMixin> get listenableServices => [_listingService];
+  List<ListenableServiceMixin> get listenableServices =>
+      [_listingService, _tenantService];
 }

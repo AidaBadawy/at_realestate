@@ -55,14 +55,14 @@ class TenantService with ListenableServiceMixin {
         },
       );
 
-      if (totalPocket.isNotEmpty) {
-        _tenantList.value = List.from(totalPocket
-            .map<TenantModel>((e) => TenantModel.fromJson(e.toJson())));
-
-        return true;
-      }
+      // if (totalPocket.isNotEmpty) {
+      _tenantList.value = List.from(totalPocket
+          .map<TenantModel>((e) => TenantModel.fromJson(e.toJson())));
 
       return true;
+      // }
+
+      // return true;
     } on ClientException catch (e) {
       Fluttertoast.showToast(
           msg: e.response["message"],

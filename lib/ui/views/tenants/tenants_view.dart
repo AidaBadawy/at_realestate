@@ -1,8 +1,11 @@
 import 'package:aisu_realestate/ui/common/app_colors.dart';
+import 'package:aisu_realestate/ui/common/app_images.dart';
+import 'package:aisu_realestate/ui/common/box_text.dart';
 import 'package:aisu_realestate/ui/common/styles.dart';
 import 'package:aisu_realestate/ui/common/ui_helpers.dart';
 import 'package:aisu_realestate/ui/widgets/tenant_card.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:stacked/stacked.dart';
 
 import 'tenants_viewmodel.dart';
@@ -103,20 +106,39 @@ class TenantsView extends StackedView<TenantsViewModel> {
               },
             ),
           ),
-          verticalSpaceSmall,
+          verticalSpaceFifteen,
           Expanded(
-            child: ListView.separated(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              itemBuilder: (context, index) {
-                return const TenantCard();
-              },
-              separatorBuilder: (context, index) {
-                return const Divider(
-                  thickness: 1,
-                );
-              },
-              itemCount: 5,
-            ),
+            child: viewModel.tenantList.isEmpty
+                ? Center(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        LottieBuilder.asset(
+                          emptyLottie,
+                          height: 180,
+                        ),
+                        ManropeText.medium(
+                            "Seems Empty in here", 14, kcDarkGreyColor),
+                        verticalSpaceLarge,
+                      ],
+                    ),
+                  )
+                : ListView.separated(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    itemBuilder: (context, index) {
+                      return TenantCard(
+                        tenant: viewModel.tenantList[index],
+                      );
+                    },
+                    separatorBuilder: (context, index) {
+                      // return const Divider(
+                      //   thickness: 1,
+                      // );
+                      return verticalSpaceSmall;
+                    },
+                    itemCount: viewModel.tenantList.length,
+                  ),
           ),
         ],
       ),
@@ -132,4 +154,10 @@ class TenantsView extends StackedView<TenantsViewModel> {
     BuildContext context,
   ) =>
       TenantsViewModel();
+
+  @override
+  void onViewModelReady(TenantsViewModel viewModel) {
+    viewModel.initTenantView();
+    super.onViewModelReady(viewModel);
+  }
 }

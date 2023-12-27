@@ -2,25 +2,27 @@ import 'package:aisu_realestate/models/landlord_model.dart';
 import 'package:aisu_realestate/models/property_model.dart';
 
 class TenantModel {
-  final int? balancePayment;
+  int? balancePayment;
+  int? rentPayment;
   final String? collectionId;
   final String? collectionName;
   final DateTime? created;
-  final String? email;
+  String? email;
   final TenantModelExpand? expand;
-  final String? id;
-  final String? idNumber;
+  String? id;
+  String? idNumber;
   final String? landlord;
-  final DateTime? lastPayment;
-  final String? name;
+  DateTime? lastPayment;
+  String? name;
   final int? pendingPayment;
-  final String? phone;
+  String? phone;
   final String? property;
-  final String? tenantNumber;
+  String? tenantNumber;
   final DateTime? updated;
 
   TenantModel({
     this.balancePayment,
+    this.rentPayment,
     this.collectionId,
     this.collectionName,
     this.created,
@@ -40,6 +42,7 @@ class TenantModel {
 
   factory TenantModel.fromJson(Map<String, dynamic> json) => TenantModel(
         balancePayment: json["balance_payment"],
+        rentPayment: json["rent_payment"],
         collectionId: json["collectionId"],
         collectionName: json["collectionName"],
         created:
@@ -51,7 +54,7 @@ class TenantModel {
         id: json["id"],
         idNumber: json["id_number"],
         landlord: json["landlord"],
-        lastPayment: json["last_payment"] == null
+        lastPayment: json["last_payment"] == null || json["last_payment"] == ""
             ? null
             : DateTime.parse(json["last_payment"]),
         name: json["name"],
@@ -65,6 +68,7 @@ class TenantModel {
 
   Map<String, dynamic> toJson() => {
         "balance_payment": balancePayment,
+        "rent_payment": rentPayment,
         // "collectionId": collectionId,
         // "collectionName": collectionName,
         // "created": created?.toIso8601String(),

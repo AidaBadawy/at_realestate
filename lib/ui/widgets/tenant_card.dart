@@ -1,16 +1,22 @@
 import 'package:aisu_realestate/app/app_exports.dart';
+import 'package:aisu_realestate/models/tenant_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class TenantCard extends StatelessWidget {
+  final TenantModel tenant;
   const TenantCard({
     super.key,
+    required this.tenant,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+      decoration: BoxDecoration(
+          color: kcPrimaryColorHighlight,
+          borderRadius: BorderRadius.circular(10)),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       child: Row(
         children: [
           Container(
@@ -36,7 +42,7 @@ class TenantCard extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       text: TextSpan(
-                        text: "Aidarus Badawy",
+                        text: tenant.name,
                         style: manropeSemiBold.copyWith(
                           color: kcBlackColor,
                           fontSize: 14,
@@ -44,7 +50,7 @@ class TenantCard extends StatelessWidget {
                       ),
                     ),
                     const Spacer(),
-                    ManropeText.semiBold("TE-0001", 14, kcBlackColor)
+                    ManropeText.semiBold(tenant.tenantNumber!, 14, kcBlackColor)
                   ],
                 ),
                 verticalSpaceTiny,
@@ -55,7 +61,7 @@ class TenantCard extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         text: TextSpan(
-                          text: "0701998881",
+                          text: tenant.phone,
                           style: manropeMediumFonts.copyWith(
                             color: kcBlackColor,
                             fontSize: 14,
