@@ -13,8 +13,8 @@ class PaymentViewModel extends ReactiveViewModel {
   final _navigationService = locator<NavigationService>();
   final _listingService = locator<ListingService>();
 
-  List<LandlordModel> get placeList => _listingService.landlordList;
-  List<ApartmentModel> get apartmentList => _listingService.apartmentList;
+  List<LandlordModel> get landlord => _listingService.landlordList;
+  // List<ApartmentModel> get apartmentList => _listingService.apartmentList;
   List<PropertyModel> get propertyList => _listingService.propertyList;
 
   List<String> paymentType = [
@@ -176,8 +176,10 @@ class PaymentViewModel extends ReactiveViewModel {
     notifyListeners();
   }
 
-  updateLandlordSelected(LandlordModel landlordSearch) {
+  updateLandlordSelected(LandlordModel landlordSearch) async {
     _landlordSelected = landlordSearch;
+
+    _listingService.clearSearchApartment();
 
     _apartmentSelected = defaultApartmentModel;
     _propertySelected = defaultProperty;
@@ -185,26 +187,34 @@ class PaymentViewModel extends ReactiveViewModel {
     _propertyListData = [];
     _apartmentListData = [];
 
-    _apartmentListData = apartmentList
-        .where((element) => element.landlordId == landlordSearch.id)
-        .toList();
+    _apartmentListData =
+        await _listingService.fetchLandlordApartment(landlordSearch.id);
 
     notifyListeners();
   }
 
-  setSelectApartment(ApartmentModel apartmentData) {
+  setSelectApartment(ApartmentModel apartmentData) async {
     _apartmentSelected = apartmentData;
 
     _propertySelected = defaultProperty;
 
-    _propertyListData = propertyList
-        .where((element) => element.apartmentId == apartmentData.id)
-        .toList();
+    _propertyListData = [];
+
+    _propertyListData =
+        await _listingService.fetchLandlordProperty(apartmentData.id);
     notifyListeners();
   }
 
   setSelectProperty(PropertyModel propertyData) {
     _propertySelected = propertyData;
+
+    if (_propertySelected.tenantModel == null) {
+      paymentCategory.removeWhere((element) => element == "Rent");
+    } else {
+      if (paymentCategory.length == 2) {
+        paymentCategory.add("Rent");
+      }
+    }
     _paymentCategorySelected = "";
     notifyListeners();
   }
@@ -231,12 +241,10 @@ class PaymentViewModel extends ReactiveViewModel {
     );
   }
 
-  List<LandlordModel> getSuggestions(String query) {
-    List<LandlordModel> matches = placeList.toList();
-    // matches.addAll(placeList);
+  Future<List<LandlordModel>> getSuggestions(String query) async {
+    List<LandlordModel> matches =
+        await _listingService.searchTotalLandlord(query);
 
-    matches
-        .retainWhere((s) => s.name.toLowerCase().contains(query.toLowerCase()));
     return matches;
   }
 

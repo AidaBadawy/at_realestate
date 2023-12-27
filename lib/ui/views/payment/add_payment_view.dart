@@ -9,6 +9,7 @@ import 'package:aisu_realestate/ui/widgets/input_decoration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 
@@ -38,6 +39,8 @@ class AddPaymentView extends StackedView<PaymentViewModel>
     PaymentViewModel viewModel,
     Widget? child,
   ) {
+    final formatter = NumberFormat.decimalPattern();
+
     return Scaffold(
       backgroundColor: kcWhiteColor,
       appBar: AppBar(
@@ -135,6 +138,19 @@ class AddPaymentView extends StackedView<PaymentViewModel>
                       suggestionsCallback: (pattern) {
                         return viewModel.getSuggestions(pattern);
                       },
+                      noItemsFoundBuilder: (context) {
+                        return ListTile(
+                          title: RichText(
+                            text: TextSpan(
+                              text: "Landlord not found",
+                              style: manropeRegularFonts.copyWith(
+                                color: kcBlackColor,
+                                fontSize: 13,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
                       itemBuilder: (context, suggestion) {
                         return ListTile(
                           title: RichText(
@@ -158,7 +174,8 @@ class AddPaymentView extends StackedView<PaymentViewModel>
                         );
                       },
                       onSuggestionSelected: (suggestion) {
-                        landlordController.text = suggestion.name;
+                        landlordController.text =
+                            "${suggestion.name} - ${suggestion.landlordNumber}";
                         viewModel.updateLandlordSelected(suggestion);
                       },
                     ),
@@ -379,68 +396,85 @@ class AddPaymentView extends StackedView<PaymentViewModel>
                     if (viewModel.paymentCategorySelected == "Expense") ...[],
                     if (viewModel.paymentCategorySelected == "Rent") ...[
                       verticalSpaceSmall,
-                      const Row(
-                        children: [
-                          Expanded(
-                            child: HomeCardWidget(
-                              title: "Monthly Rent",
-                              data: "34,000",
-                              isProperty: true,
-                              cardColor: kcGreenHighlight,
-                              iconColor: kcGreenColor,
-                              textColor: kcBlackColor,
-                              icon: coinIcon,
-                              dataFontSize: 20,
-                              titleFontSize: 15,
+                      if (viewModel.propertySelected.tenantModel != null) ...[
+                        Row(
+                          children: [
+                            Expanded(
+                              child: HomeCardWidget(
+                                title: "Monthly Rent",
+                                data: formatter.format(viewModel
+                                    .propertySelected
+                                    .tenantModel!
+                                    .rentPayment!),
+                                isProperty: true,
+                                cardColor: kcGreenHighlight,
+                                iconColor: kcGreenColor,
+                                textColor: kcBlackColor,
+                                icon: coinIcon,
+                                dataFontSize: 20,
+                                titleFontSize: 15,
+                              ),
                             ),
-                          ),
-                          horizontalSpaceSmall,
-                          Expanded(
-                            child: HomeCardWidget(
-                              title: "Balance C/f",
-                              data: "2,000,000",
-                              isProperty: true,
-                              cardColor: kcPrimaryColorHighlight,
-                              iconColor: kcPrimaryColor,
-                              textColor: kcBlackColor,
-                              icon: coinIcon,
-                              dataFontSize: 20,
-                              titleFontSize: 15,
+                            horizontalSpaceSmall,
+                            Expanded(
+                              child: HomeCardWidget(
+                                title: "Balance C/f",
+                                data: formatter.format(viewModel
+                                    .propertySelected
+                                    .tenantModel!
+                                    .balancePayment!),
+                                isProperty: true,
+                                cardColor: kcPrimaryColorHighlight,
+                                iconColor: kcPrimaryColor,
+                                textColor: kcBlackColor,
+                                icon: coinIcon,
+                                dataFontSize: 20,
+                                titleFontSize: 15,
+                              ),
+                            )
+                          ],
+                        ),
+                        verticalSpaceFifteen,
+                        Row(
+                          children: [
+                            Expanded(
+                              child: HomeCardWidget(
+                                title: "Tenant",
+                                data: viewModel
+                                    .propertySelected.tenantModel!.name!,
+                                cardColor: kcGreenHighlight,
+                                iconColor: kcGreenColor,
+                                textColor: kcBlackColor,
+                                icon: personIcon,
+                                dataFontSize: 16,
+                                titleFontSize: 15,
+                              ),
                             ),
-                          )
-                        ],
-                      ),
-                      verticalSpaceFifteen,
-                      const Row(
-                        children: [
-                          Expanded(
-                            child: HomeCardWidget(
-                              title: "Tenant",
-                              data: "Abdallah Swaleh",
-                              cardColor: kcGreenHighlight,
-                              iconColor: kcGreenColor,
-                              textColor: kcBlackColor,
-                              icon: personIcon,
-                              dataFontSize: 16,
-                              titleFontSize: 15,
-                            ),
-                          ),
-                          horizontalSpaceSmall,
-                          Expanded(
-                            child: HomeCardWidget(
-                              title: "Last Payment",
-                              data: "08-10-23",
-                              cardColor: kcPrimaryColorHighlight,
-                              iconColor: kcPrimaryColor,
-                              textColor: kcBlackColor,
-                              icon: calendarIcon,
-                              dataFontSize: 20,
-                              titleFontSize: 15,
-                            ),
-                          )
-                        ],
-                      ),
-                      verticalSpaceMedium,
+                            horizontalSpaceSmall,
+                            Expanded(
+                              child: HomeCardWidget(
+                                title: "Last Payment",
+                                data: viewModel.propertySelected.tenantModel!
+                                            .lastPayment ==
+                                        null
+                                    ? "N/A"
+                                    : DateFormat().format(viewModel
+                                        .propertySelected
+                                        .tenantModel!
+                                        .lastPayment!),
+                                // data: "08-10-23",
+                                cardColor: kcPrimaryColorHighlight,
+                                iconColor: kcPrimaryColor,
+                                textColor: kcBlackColor,
+                                icon: calendarIcon,
+                                dataFontSize: 20,
+                                titleFontSize: 15,
+                              ),
+                            )
+                          ],
+                        ),
+                        verticalSpaceMedium,
+                      ],
                       Row(
                         children: [
                           const Icon(
