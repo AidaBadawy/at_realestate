@@ -24,7 +24,7 @@ class StartupView extends StackedView<StartupViewModel> {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 70),
-              child: Image.asset(logoNoBg),
+              child: Image.asset(logoIcon),
             ),
             verticalSpaceLarge,
             SizedBox(

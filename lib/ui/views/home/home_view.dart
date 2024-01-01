@@ -480,27 +480,27 @@ class HomeView extends StackedView<HomeViewModel> {
                         ),
                       ),
                       verticalSpaceMedium,
-                      Row(
-                        children: [
-                          ManropeText.bold("Requests", 16, kcBlackColor),
-                          const Spacer(),
-                          ManropeText.regular("View all", 14, kcLightGrey),
-                        ],
-                      ),
-                      verticalSpaceFifteen,
-                      CarouselSlider(
-                        options: CarouselOptions(
-                            height: 200.0,
-                            viewportFraction: 1,
-                            enableInfiniteScroll: false),
-                        items: [1, 2, 3, 4, 5].map((i) {
-                          return Builder(
-                            builder: (BuildContext context) {
-                              return const RequestCardWidget();
-                            },
-                          );
-                        }).toList(),
-                      ),
+                      // Row(
+                      //   children: [
+                      //     ManropeText.bold("Requests", 16, kcBlackColor),
+                      //     const Spacer(),
+                      //     ManropeText.regular("View all", 14, kcLightGrey),
+                      //   ],
+                      // ),
+                      // verticalSpaceFifteen,
+                      // CarouselSlider(
+                      //   options: CarouselOptions(
+                      //       height: 200.0,
+                      //       viewportFraction: 1,
+                      //       enableInfiniteScroll: false),
+                      //   items: [1, 2, 3, 4, 5].map((i) {
+                      //     return Builder(
+                      //       builder: (BuildContext context) {
+                      //         return const RequestCardWidget();
+                      //       },
+                      //     );
+                      //   }).toList(),
+                      // ),
                       verticalSpaceMedium,
                     ],
                   ),

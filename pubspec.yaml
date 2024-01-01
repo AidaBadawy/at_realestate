@@ -37,6 +37,7 @@ dependencies:
   loading_animation_widget: ^1.2.0+4
   lottie: ^2.7.0
   persistent_bottom_nav_bar: ^5.0.2
+  skeletons: ^0.0.3
 
 dev_dependencies:
   build_runner: ^2.4.5
