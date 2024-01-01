@@ -1,7 +1,5 @@
-import 'package:aisu_realestate/models/user_model.dart';
 import 'package:aisu_realestate/services/authentication_service.dart';
 import 'package:aisu_realestate/services/pocketbase_service.dart';
-import 'package:aisu_realestate/utils/shared_preferences.dart';
 import 'package:pocketbase/pocketbase.dart';
 import 'package:stacked/stacked.dart';
 import 'package:aisu_realestate/app/app.locator.dart';
@@ -15,6 +13,8 @@ class StartupViewModel extends BaseViewModel {
 
   // Place anything here that needs to happen before we get into the application
   Future runStartupLogic() async {
+    await Future.delayed(const Duration(seconds: 3));
+
     AsyncAuthStore asyncUser = await _pocketBaseService.isUserValid();
 
     if (asyncUser.isValid) {
@@ -27,8 +27,6 @@ class StartupViewModel extends BaseViewModel {
     }
 
     // String userString = await UserPreferences().getUser();
-
-    // await Future.delayed(const Duration(seconds: 3));
 
     // _navigationService.replaceWithLoginView();
 

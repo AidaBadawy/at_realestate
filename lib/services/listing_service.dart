@@ -243,7 +243,7 @@ class ListingService with ListenableServiceMixin {
   final pb = PocketBase(env!.baseUrl);
 
   fetchLandlordPocketBase(int page, int total) async {
-    final resultList = await pb.collection('landlord').getList(
+    await pb.collection('landlord').getList(
       page: page,
       perPage: total,
       headers: {
@@ -290,6 +290,7 @@ class ListingService with ListenableServiceMixin {
 
       if (totalPocket.isNotEmpty) {
         _totalCount.value = TotalCount.fromJson(totalPocket.first.toJson());
+        notifyListeners();
 
         return true;
       }
@@ -320,9 +321,12 @@ class ListingService with ListenableServiceMixin {
       if (totalPocket.isNotEmpty) {
         _landlordList.value = List.from(totalPocket
             .map<LandlordModel>((e) => LandlordModel.fromJson(e.toJson())));
+        notifyListeners();
 
         return true;
       }
+
+      fetchTotalCount();
 
       return true;
     } on ClientException catch (e) {

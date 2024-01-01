@@ -13,6 +13,7 @@ import 'package:stacked_shared/stacked_shared.dart';
 
 import '../services/authentication_service.dart';
 import '../services/listing_service.dart';
+import '../services/payment_service.dart';
 import '../services/pocketbase_service.dart';
 import '../services/tenant_service.dart';
 
@@ -34,4 +35,5 @@ Future<void> setupLocator({
   locator.registerLazySingleton(() => AuthenticationService());
   locator.registerLazySingleton(() => PocketBaseService());
   locator.registerLazySingleton(() => TenantService());
+  locator.registerLazySingleton(() => PaymentService());
 }

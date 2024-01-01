@@ -3,10 +3,11 @@ import 'package:aisu_realestate/ui/common/box_text.dart';
 import 'package:aisu_realestate/ui/common/styles.dart';
 import 'package:aisu_realestate/ui/widgets/column_graph_widget.dart';
 import 'package:aisu_realestate/ui/widgets/doughnut_widget.dart';
-import 'package:aisu_realestate/ui/widgets/home_card_widget.dart';
+import 'package:aisu_realestate/ui/widgets/home_card_widget_copy.dart';
 import 'package:aisu_realestate/ui/widgets/request_card_widget.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:stacked/stacked.dart';
 import 'package:aisu_realestate/ui/common/app_colors.dart';
 import 'package:aisu_realestate/ui/common/ui_helpers.dart';
@@ -31,6 +32,7 @@ class HomeView extends StackedView<HomeViewModel> {
             viewModel.initHome();
           },
           child: CustomScrollView(
+            physics: const BouncingScrollPhysics(),
             slivers: [
               SliverToBoxAdapter(
                 child: Padding(
@@ -41,29 +43,43 @@ class HomeView extends StackedView<HomeViewModel> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       verticalSpaceFifteen,
-                      RichText(
-                        text: TextSpan(
-                          text: "Hello, ",
-                          style: manropeRegularFonts.copyWith(
-                            color: kcBlackColor,
-                            fontSize: 24,
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const CircleAvatar(
+                            radius: 24,
+                            backgroundColor: kcPrimaryColorHighlight,
+                            backgroundImage: AssetImage(logoImage),
                           ),
-                          children: [
-                            TextSpan(
-                              text: viewModel.userModel.record!.name,
-                              style: manropeMediumFonts.copyWith(
+                          horizontalSpaceFifteen,
+                          RichText(
+                            text: TextSpan(
+                              text: "Hello, \n",
+                              style: manropeRegularFonts.copyWith(
                                 color: kcBlackColor,
-                                fontSize: 24,
+                                fontSize: 18,
                               ),
+                              children: [
+                                TextSpan(
+                                  text: viewModel.userModel.record!.name,
+                                  style: manropeMediumFonts.copyWith(
+                                    color: kcBlackColor,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                          const Spacer(),
+                          IconButton(
+                              onPressed: () {}, icon: const Icon(Feather.bell))
+                        ],
                       ),
-                      verticalSpaceFifteen,
+                      verticalSpaceMedium,
                       Row(
                         children: [
                           Expanded(
-                            child: HomeCardWidget(
+                            child: HomeCardWidgetCopy(
                               title: "Properties",
                               data:
                                   viewModel.totalCount.propertyCount.toString(),
@@ -71,21 +87,21 @@ class HomeView extends StackedView<HomeViewModel> {
                               iconColor: kcPrimaryColor,
                               textColor: kcBlackColor,
                               icon: buildingIcon,
-                              dataFontSize: 24,
-                              titleFontSize: 16,
+                              dataFontSize: 28,
+                              titleFontSize: 18,
                             ),
                           ),
                           horizontalSpaceSmall,
                           Expanded(
-                            child: HomeCardWidget(
+                            child: HomeCardWidgetCopy(
                               title: "Tenants",
                               data: viewModel.totalCount.tenantCount.toString(),
                               cardColor: kcPrimaryColorHighlight,
                               iconColor: kcPrimaryColor,
                               textColor: kcBlackColor,
                               icon: usersTwoIcon,
-                              dataFontSize: 24,
-                              titleFontSize: 16,
+                              dataFontSize: 28,
+                              titleFontSize: 18,
                             ),
                           )
                         ],
@@ -94,7 +110,7 @@ class HomeView extends StackedView<HomeViewModel> {
                       Row(
                         children: [
                           Expanded(
-                            child: HomeCardWidget(
+                            child: HomeCardWidgetCopy(
                               title: "Landlords",
                               data:
                                   viewModel.totalCount.landlordCount.toString(),
@@ -102,21 +118,36 @@ class HomeView extends StackedView<HomeViewModel> {
                               iconColor: kcPrimaryColor,
                               textColor: kcBlackColor,
                               icon: landlordTwoIcon,
-                              dataFontSize: 24,
-                              titleFontSize: 16,
+                              dataFontSize: 28,
+                              titleFontSize: 18,
                             ),
                           ),
                           horizontalSpaceSmall,
+
+                          // Expanded(
+                          //   child: HomeCardWidget(
+                          //     title: "Vacant",
+                          //     data: viewModel.totalCount.vacantCount.toString(),
+                          //     cardColor: kcRedHighlightTwo,
+                          //     iconColor: kcRedColor,
+                          //     textColor: kcRedColor,
+                          //     datatextColor: kcRedColor,
+                          //     icon: buildingIcon,
+                          //     dataFontSize: 28,
+                          //     titleFontSize: 18,
+                          //   ),
+                          // )
                           Expanded(
-                            child: HomeCardWidget(
+                            child: HomeCardWidgetCopy(
                               title: "Vacant",
                               data: viewModel.totalCount.vacantCount.toString(),
-                              cardColor: kcRedColor.withOpacity(.1),
+                              cardColor: kcRedHighlightTwo,
                               iconColor: kcRedColor,
                               textColor: kcRedColor,
+                              datatextColor: kcRedColor,
                               icon: buildingIcon,
-                              dataFontSize: 24,
-                              titleFontSize: 16,
+                              dataFontSize: 28,
+                              titleFontSize: 18,
                             ),
                           )
                         ],
@@ -186,45 +217,41 @@ class HomeView extends StackedView<HomeViewModel> {
                                       children: [
                                         ManropeText.semiBold(
                                             "Earning in ", 14, kcBlackColor),
-                                        Container(
-                                          // color: Colors.red.shade300,
-                                          child: ButtonTheme(
-                                            alignedDropdown: false,
-                                            padding: const EdgeInsets.all(20),
-                                            // layoutBehavior:
-                                            //     ButtonBarLayoutBehavior
-                                            //         .constrained,
-                                            child: DropdownButton(
-                                              underline:
-                                                  const SizedBox.shrink(),
-                                              isExpanded: false,
-                                              padding: EdgeInsets.zero,
-                                              alignment: Alignment.centerLeft,
-                                              isDense: true,
-                                              icon: const SizedBox.shrink(),
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                              hint: ManropeText.regular(
-                                                  "Select Month",
-                                                  11,
-                                                  kcLightGrey),
-                                              value:
-                                                  viewModel.selectedMonth != ""
-                                                      ? viewModel.selectedMonth
-                                                      : null,
-                                              items: viewModel.months
-                                                  .map((e) => DropdownMenuItem(
-                                                        value: e,
-                                                        child: ManropeText
-                                                            .semiBold(e, 14,
-                                                                kcPrimaryColor),
-                                                      ))
-                                                  .toList(),
-                                              onChanged: (value) {
-                                                viewModel
-                                                    .setSelectedCity(value!);
-                                              },
-                                            ),
+                                        ButtonTheme(
+                                          alignedDropdown: false,
+                                          padding: const EdgeInsets.all(20),
+                                          // layoutBehavior:
+                                          //     ButtonBarLayoutBehavior
+                                          //         .constrained,
+                                          child: DropdownButton(
+                                            underline: const SizedBox.shrink(),
+                                            isExpanded: false,
+                                            padding: EdgeInsets.zero,
+                                            alignment: Alignment.centerLeft,
+                                            isDense: true,
+                                            icon: const SizedBox.shrink(),
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                            hint: ManropeText.regular(
+                                                "Select Month",
+                                                11,
+                                                kcLightGrey),
+                                            value: viewModel.selectedMonth != ""
+                                                ? viewModel.selectedMonth
+                                                : null,
+                                            items: viewModel.months
+                                                .map((e) => DropdownMenuItem(
+                                                      value: e,
+                                                      child:
+                                                          ManropeText.semiBold(
+                                                              e,
+                                                              14,
+                                                              kcPrimaryColor),
+                                                    ))
+                                                .toList(),
+                                            onChanged: (value) {
+                                              viewModel.setSelectedCity(value!);
+                                            },
                                           ),
                                         ),
                                       ],

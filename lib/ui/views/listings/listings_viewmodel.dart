@@ -113,13 +113,13 @@ class ListingsViewModel extends ReactiveViewModel {
 
   int _documentId = 1;
 
-  String _currentApartmentId = "";
+  final String _currentApartmentId = "";
   String get currentApartmentId => _currentApartmentId;
 
   String _currentPropertyId = "";
   String get currentPropertyId => _currentPropertyId;
 
-  String _currentLandlordId = "";
+  final String _currentLandlordId = "";
   String get currentLandlordId => _currentLandlordId;
 
   String _landlordId = "";
@@ -148,9 +148,9 @@ class ListingsViewModel extends ReactiveViewModel {
     // final id = ObjectId(); // That's all 🔥😮!
     // _landlordModel.id = id.hexString;
 
-    _currentApartmentId = appIdData.apartmentNumber!;
-    _currentPropertyId = appIdData.propertyNumber!;
-    _currentLandlordId = appIdData.landlordNumber!;
+    // _currentApartmentId = appIdData.apartmentNumber!;
+    // _currentPropertyId = appIdData.propertyNumber!;
+    // _currentLandlordId = appIdData.landlordNumber!;
 
     notifyListeners();
   }
@@ -218,21 +218,22 @@ class ListingsViewModel extends ReactiveViewModel {
         landlordId: _landlordModel.id,
         apartmentNumber: _currentApartmentId);
 
-    if (apartmentNameController.text.isNotEmpty &&
-        apartmentAreaController.text.isNotEmpty &&
-        apartmentStreetController.text.isNotEmpty &&
-        _selectedCity != "") {
-      _listingService.addNewApartment(newApartment);
+    // if (apartmentNameController.text.isNotEmpty &&
+    //     apartmentAreaController.text.isNotEmpty &&
+    //     apartmentStreetController.text.isNotEmpty &&
+    //     _selectedCity != "") {
 
-      String newApartId = _currentApartmentId;
+    //   String newApartId = _currentApartmentId;
 
-      List split = newApartmentList.last.apartmentNumber.split("-");
-      int newId = int.parse(split.last) + 1;
+    //   List split = newApartmentList.last.apartmentNumber.split("-");
+    //   int newId = int.parse(split.last) + 1;
 
-      newApartId = "AP-${newId.toString().padLeft(split.last.length, "0")}";
+    //   newApartId = "AP-${newId.toString().padLeft(split.last.length, "0")}";
 
-      _currentApartmentId = newApartId;
-    }
+    //   _currentApartmentId = newApartId;
+    // }
+
+    _listingService.addNewApartment(newApartment);
 
     apartmentNameController.clear();
     apartmentAreaController.clear();
@@ -468,10 +469,11 @@ class ListingsViewModel extends ReactiveViewModel {
 
       await Future.delayed(const Duration(seconds: 2)).whenComplete(() {
         // initLandlordView();
-        fetchListing();
+        _listingService.fetchTotalCount();
 
         _navigationService.back();
         _listingService.clearApartment();
+
         _listingService.clearProperty();
 
         // scaffoldKey.currentState?.closeEndDrawer();

@@ -150,7 +150,7 @@ class PropertyDetailTab extends StatelessWidget {
                       title: "Monthly Rent",
                       data: formatter
                           .format(viewModel.selectedProperty.monthlyRent),
-                      cardColor: kcGreenColor.withOpacity(.1),
+                      cardColor: kcGreenHighlight,
                       iconColor: kcGreenColor,
                       textColor: kcBlackColor,
                       icon: coinIcon,
@@ -168,8 +168,8 @@ class PropertyDetailTab extends StatelessWidget {
                       data: formatter.format(
                           viewModel.selectedProperty.monthlyRent *
                               viewModel.selectedProperty.deposit),
-                      cardColor: kcAmberColor.withOpacity(.1),
-                      iconColor: kcAmberColor,
+                      cardColor: kcPrimaryColorHighlight,
+                      iconColor: kcPrimaryColor,
                       textColor: kcBlackColor,
                       icon: coinIcon,
                       top: -15,
@@ -196,8 +196,8 @@ class PropertyDetailTab extends StatelessWidget {
                     child: HomeCardWidget(
                       title: "Bed Room",
                       data: viewModel.selectedProperty.room.toString(),
-                      cardColor: kcBlueColor.withOpacity(.1),
-                      iconColor: kcBlueColor,
+                      cardColor: kcMistyRose,
+                      iconColor: kcOldRose,
                       textColor: kcBlackColor,
                       icon: bedIcon,
                       top: 2,
@@ -215,8 +215,8 @@ class PropertyDetailTab extends StatelessWidget {
                     child: HomeCardWidget(
                       title: "Bath Room",
                       data: viewModel.selectedProperty.bath.toString(),
-                      cardColor: kcBlueColor.withOpacity(.1),
-                      iconColor: kcBlueColor,
+                      cardColor: kcMistyRose,
+                      iconColor: kcOldRose,
                       textColor: kcBlackColor,
                       icon: bathIcon,
                       top: 2,
@@ -234,8 +234,8 @@ class PropertyDetailTab extends StatelessWidget {
                     child: HomeCardWidget(
                       title: "Flat No",
                       data: viewModel.selectedProperty.flat.toString(),
-                      cardColor: kcBlueColor.withOpacity(.1),
-                      iconColor: kcBlueColor,
+                      cardColor: kcMistyRose,
+                      iconColor: kcOldRose,
                       textColor: kcBlackColor,
                       icon: flatIcon,
                       top: 2,

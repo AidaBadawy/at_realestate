@@ -86,14 +86,17 @@ class AddTenantsView extends StackedView<TenantsViewModel> {
           ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: ButtonWidget(
-            height: 50,
-            isBusy: viewModel.status == StatusEnum.busy,
-            isDisabled: false,
-            text: "Next",
-            onTap: () => viewModel.goToNext(),
+        floatingActionButton: Hero(
+          tag: "Save Tenant",
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: ButtonWidget(
+              height: 50,
+              isBusy: viewModel.status == StatusEnum.busy,
+              isDisabled: false,
+              text: viewModel.currentIndex == 2 ? "Save Tenant" : "Next",
+              onTap: () => viewModel.goToNext(),
+            ),
           ),
         ));
   }

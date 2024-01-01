@@ -39,7 +39,7 @@ class PaymentTenantTab extends StatelessWidget {
                       title: "Monthly Rent",
                       data:
                           formatter.format(viewModel.tenantPayload.rentPayment),
-                      cardColor: kcGreenColor.withOpacity(.1),
+                      cardColor: kcGreenHighlight,
                       iconColor: kcGreenColor,
                       textColor: kcBlackColor,
                       icon: coinIcon,
@@ -57,8 +57,8 @@ class PaymentTenantTab extends StatelessWidget {
                       data: formatter.format(
                           viewModel.tenantPayload.rentPayment! *
                               viewModel.selectedProperty.deposit),
-                      cardColor: kcAmberColor.withOpacity(.1),
-                      iconColor: kcAmberColor,
+                      cardColor: kcPrimaryColorHighlight,
+                      iconColor: kcPrimaryColor,
                       textColor: kcBlackColor,
                       icon: coinIcon,
                       top: -15,

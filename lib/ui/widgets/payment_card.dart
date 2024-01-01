@@ -19,24 +19,31 @@ class PaymentCard extends StatelessWidget {
     final formatter = NumberFormat.decimalPattern();
 
     Color iconColor = kcPrimaryColor;
+    Color bgColor = kcPrimaryColorHighlight;
 
     switch (paymentModel.type) {
       case "Rent":
         iconColor = kcGreenColor;
+        bgColor = kcGreenHighlight;
 
         break;
       case "Expense":
         iconColor = kcAmberColor;
+        bgColor = kcLightAmberColor;
 
         break;
       case "Deposit":
         iconColor = kcPurpleColor;
+        bgColor = kcPurpleColorHighlight;
 
         break;
       default:
     }
 
     return Container(
+      decoration: BoxDecoration(
+          color: isPending ? kcRedHighlightTwo : bgColor,
+          borderRadius: BorderRadius.circular(10)),
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: Row(
         children: [
@@ -64,7 +71,7 @@ class PaymentCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   text: TextSpan(
                     text: isPending
-                        ? paymentModel.tenantName
+                        ? paymentModel.expand!.tenant!.name
                         : paymentModel.invoiceNumber,
                     style: manropeSemiBold.copyWith(
                       color: kcBlackColor,

@@ -135,4 +135,50 @@ class AuthenticationService with ListenableServiceMixin {
       return false;
     }
   }
+
+  Future<bool> logoutPocket() async {
+    try {
+      _pocketBaseService.pb.authStore.clear();
+
+      // if (landlordPocket.record == null) {
+      //   return false;
+      // }
+      final prefs = await SharedPreferences.getInstance();
+
+      prefs.clear();
+
+      // final store = AsyncAuthStore(
+      //   save: (String data) async => prefs.setString('pb_auth', data),
+      //   initial: prefs.getString('pb_auth'),
+      // );
+      // _pocketBaseService.pb = PocketBase(env!.baseUrl, authStore: store);
+      // _userData.value = UserModel.fromJson(landlordPocket.toJson());
+
+      // String dataShared = userModelToJson(_userData.value);
+
+      // prefs.setString('user_shared', dataShared);
+
+      // String userModelToJson(UserModel data) => json.encode(data.toJson());
+
+      return true;
+    } on ClientException catch (e) {
+      ScaffoldMessenger.of(StackedService.navigatorKey!.currentContext!)
+          .showSnackBar(
+        SnackBar(
+          content: ManropeText.medium(e.response["message"], 14, kcWhiteColor),
+          duration: const Duration(seconds: 2),
+          backgroundColor: kcRedColor,
+        ),
+      );
+      // Fluttertoast.showToast(
+      //     msg: e.response["message"],
+      //     toastLength: Toast.LENGTH_SHORT,
+      //     gravity: ToastGravity.CENTER,
+      //     timeInSecForIosWeb: 5,
+      //     backgroundColor: Colors.red,
+      //     textColor: Colors.white,
+      //     fontSize: 16.0);
+      return false;
+    }
+  }
 }

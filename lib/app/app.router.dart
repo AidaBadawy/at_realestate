@@ -13,7 +13,8 @@ import 'package:aisu_realestate/ui/views/listings/info_listings_view.dart'
     as _i11;
 import 'package:aisu_realestate/ui/views/listings/listings_view.dart' as _i5;
 import 'package:aisu_realestate/ui/views/login/login_view.dart' as _i14;
-import 'package:aisu_realestate/ui/views/payment/add_payment_view.dart' as _i13;
+import 'package:aisu_realestate/ui/views/payment/add_payment/add_payment_view.dart'
+    as _i13;
 import 'package:aisu_realestate/ui/views/payment/payment_view.dart' as _i7;
 import 'package:aisu_realestate/ui/views/reports/reports_view.dart' as _i8;
 import 'package:aisu_realestate/ui/views/settings/settings_view.dart' as _i9;

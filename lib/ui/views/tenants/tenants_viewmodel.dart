@@ -9,9 +9,11 @@ import 'package:aisu_realestate/models/apartment_model.dart';
 import 'package:aisu_realestate/models/app_id_model.dart';
 import 'package:aisu_realestate/models/document_model.dart';
 import 'package:aisu_realestate/models/landlord_model.dart';
+import 'package:aisu_realestate/models/payment_model.dart';
 import 'package:aisu_realestate/models/property_model.dart';
 import 'package:aisu_realestate/models/tenant_model.dart';
 import 'package:aisu_realestate/services/listing_service.dart';
+import 'package:aisu_realestate/services/payment_service.dart';
 import 'package:aisu_realestate/services/tenant_service.dart';
 import 'package:aisu_realestate/ui/common/enums.dart';
 import 'package:file_picker/file_picker.dart';
@@ -24,6 +26,7 @@ class TenantsViewModel extends ReactiveViewModel {
   final _bottomSheetService = locator<BottomSheetService>();
   final _listingService = locator<ListingService>();
   final _tenantService = locator<TenantService>();
+  final _paymentService = locator<PaymentService>();
 
   IncrementModel get appIdData => _listingService.incrementModel;
 
@@ -258,6 +261,8 @@ class TenantsViewModel extends ReactiveViewModel {
     TenantModel tenantModel = TenantModel(
       name: _tenantPayload.name,
       email: _tenantPayload.email,
+      deposit: _selectedProperty.deposit,
+      depositPaid: false,
       idNumber: _tenantPayload.idNumber,
       phone: _tenantPayload.phone,
       rentPayment: _tenantPayload.rentPayment,
@@ -266,7 +271,7 @@ class TenantsViewModel extends ReactiveViewModel {
       landlord: _selectedLandlord.id,
       property: _selectedProperty.id,
       balancePayment: 0,
-      lastPayment: _tenantPayload.lastPayment,
+      // lastPayment: _tenantPayload.lastPayment,
       pendingPayment: (_tenantPayload.rentPayment! * _selectedProperty.deposit),
     );
 
@@ -292,12 +297,38 @@ class TenantsViewModel extends ReactiveViewModel {
             backgroundColor: kcGreenColor,
           ),
         );
+        setPaymentsFunc(tenantId);
         fetchTenant();
+
+        _listingService.fetchTotalCount();
 
         _navigationService.back();
       });
       setStatus(StatusEnum.idle);
     }
+  }
+
+  setPaymentsFunc(tenantId) async {
+    //add deposit payment
+    PaymentModel deposit = PaymentModel(
+        tenantId: tenantId,
+        amount: _tenantPayload.rentPayment! * _selectedProperty.deposit,
+        landlordId: _selectedLandlord.id,
+        propertyId: _selectedProperty.id,
+        isPending: true,
+        type: "Deposit");
+
+    await _paymentService.addPayment(deposit);
+    PaymentModel rent = PaymentModel(
+        tenantId: tenantId,
+        amount: _tenantPayload.rentPayment!,
+        landlordId: _selectedLandlord.id,
+        propertyId: _selectedProperty.id,
+        isPending: true,
+        type: "Rent");
+    _paymentService.addPayment(rent);
+
+    //add rent payment
   }
 
   String generateRandomId() {

@@ -1,5 +1,5 @@
 import 'package:aisu_realestate/app/app.locator.dart';
-import 'package:aisu_realestate/models/tenant_model.dart';
+import 'package:aisu_realestate/models/payment_model.dart';
 import 'package:aisu_realestate/services/authentication_service.dart';
 import 'package:aisu_realestate/services/pocketbase_service.dart';
 import 'package:aisu_realestate/ui/common/pocketbase_collection.dart';
@@ -8,28 +8,28 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pocketbase/pocketbase.dart';
 import 'package:stacked/stacked.dart';
 
-class TenantService with ListenableServiceMixin {
-  TenantService() {
+class PaymentService with ListenableServiceMixin {
+  PaymentService() {
     listenToReactiveValues([
-      _tenantList,
-      _searchTenantList,
+      _recentPaymentList,
+      _pendingPaymentList,
     ]);
   }
 
   final _pocketBaseService = locator<PocketBaseService>();
   final _authenticationService = locator<AuthenticationService>();
 
-  final ReactiveValue<List<TenantModel>> _tenantList =
-      ReactiveValue<List<TenantModel>>([]);
-  List<TenantModel> get tenantList => _tenantList.value;
+  final ReactiveValue<List<PaymentModel>> _recentPaymentList =
+      ReactiveValue<List<PaymentModel>>([]);
+  List<PaymentModel> get recentPaymentList => _recentPaymentList.value;
 
-  final ReactiveValue<List<TenantModel>> _searchTenantList =
-      ReactiveValue<List<TenantModel>>([]);
-  List<TenantModel> get searchTenantList => _searchTenantList.value;
+  final ReactiveValue<List<PaymentModel>> _pendingPaymentList =
+      ReactiveValue<List<PaymentModel>>([]);
+  List<PaymentModel> get pendingPaymentList => _pendingPaymentList.value;
 
-  Future<bool> addTenant(TenantModel tenantModel) async {
+  Future<bool> addPayment(PaymentModel tenantModel) async {
     try {
-      await _pocketBaseService.pb.collection(pbTenant).create(
+      await _pocketBaseService.pb.collection(pbPayment).create(
         body: tenantModel.toJson(),
         headers: {
           'Authorization': _authenticationService.userData.token!,
@@ -50,19 +50,19 @@ class TenantService with ListenableServiceMixin {
     }
   }
 
-  Future<bool> fetchTotalTenant() async {
+  Future<bool> fetchPendingPayment() async {
     try {
-      final totalPocket =
-          await _pocketBaseService.pb.collection(pbTenant).getFullList(
-        expand: "landlord,property.apartment_id",
+      final totalPayment =
+          await _pocketBaseService.pb.collection(pbPayment).getFullList(
+        expand: "tenant,landlord,property",
+        filter: 'is_pending = true',
         headers: {
           'Authorization': _authenticationService.userData.token!,
         },
       );
 
-      // if (totalPocket.isNotEmpty) {
-      _tenantList.value = List.from(totalPocket
-          .map<TenantModel>((e) => TenantModel.fromJson(e.toJson())));
+      _pendingPaymentList.value = List.from(totalPayment
+          .map<PaymentModel>((e) => PaymentModel.fromJson(e.toJson())));
 
       return true;
       // }
@@ -81,22 +81,21 @@ class TenantService with ListenableServiceMixin {
     }
   }
 
-  Future<List<TenantModel>> searchTotalTenant(String name) async {
+  Future<bool> fetchrecentPayment() async {
     try {
-      final totalPocket = await _pocketBaseService.pb
-          .collection(pbTenantPayment)
-          .getFullList(headers: {
-        'Authorization': _authenticationService.userData.token!,
-      }, filter: 'name ~ "$name"');
+      final totalPayment =
+          await _pocketBaseService.pb.collection(pbPayment).getFullList(
+        // expand: "tenant,landlord,property",
+        filter: 'is_pending = false',
+        headers: {
+          'Authorization': _authenticationService.userData.token!,
+        },
+      );
 
-      print(totalPocket);
+      _recentPaymentList.value = List.from(totalPayment
+          .map<PaymentModel>((e) => PaymentModel.fromJson(e.toJson())));
 
-      _searchTenantList.value = List.from(totalPocket
-          .map<TenantModel>((e) => TenantModel.fromJson(e.toJson())));
-
-      // print(_searchTenantList.value);
-
-      return _searchTenantList.value;
+      return true;
     } on ClientException catch (e) {
       Fluttertoast.showToast(
           msg: e.response["message"],
@@ -106,7 +105,7 @@ class TenantService with ListenableServiceMixin {
           backgroundColor: Colors.red,
           textColor: Colors.white,
           fontSize: 16.0);
-      return [];
+      return false;
     }
   }
 }

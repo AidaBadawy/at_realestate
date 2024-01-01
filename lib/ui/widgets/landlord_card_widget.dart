@@ -10,7 +10,11 @@ class LandlordCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+      // padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+      decoration: BoxDecoration(
+          color: kcPrimaryColorHighlight,
+          borderRadius: BorderRadius.circular(10)),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       child: Row(
         children: [
           Container(

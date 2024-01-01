@@ -17,7 +17,7 @@ Future<void> main() async {
   BuildEnvironment.init(
       flavor: BuildFlavor.development,
       appName: 'AT Real Estate',
-      baseUrl: 'http://10.0.2.2:8090/');
+      baseUrl: 'https://realestate-pocketbase.fly.dev/');
   assert(env != null);
   WidgetsFlutterBinding.ensureInitialized();
 

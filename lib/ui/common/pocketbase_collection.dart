@@ -5,5 +5,7 @@ const String pbLandlord = "landlord";
 const String pbProperty = "property";
 const String pbRoles = "roles";
 const String pbTenant = "tenants";
+const String pbTenantPayment = "tenant_payment";
 const String pbLandlordFetch = "landlordFetch";
 const String pbTotalCount = "totalCount";
+const String pbPayment = "payment";

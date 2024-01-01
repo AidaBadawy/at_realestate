@@ -1,5 +1,6 @@
 import 'package:aisu_realestate/services/authentication_service.dart';
 import 'package:aisu_realestate/services/listing_service.dart';
+import 'package:aisu_realestate/services/payment_service.dart';
 import 'package:aisu_realestate/services/pocketbase_service.dart';
 import 'package:aisu_realestate/services/tenant_service.dart';
 import 'package:aisu_realestate/ui/bottom_sheets/notice/notice_sheet.dart';
@@ -7,7 +8,7 @@ import 'package:aisu_realestate/ui/dialogs/info_alert/info_alert_dialog.dart';
 import 'package:aisu_realestate/ui/views/home/home_view.dart';
 import 'package:aisu_realestate/ui/views/listings/add_listings_view.dart';
 import 'package:aisu_realestate/ui/views/listings/info_listings_view.dart';
-import 'package:aisu_realestate/ui/views/payment/add_payment_view.dart';
+import 'package:aisu_realestate/ui/views/payment/add_payment/add_payment_view.dart';
 import 'package:aisu_realestate/ui/views/startup/startup_view.dart';
 import 'package:aisu_realestate/ui/views/tenants/add_tenant_tab/add_tenants_view.dart';
 import 'package:stacked/stacked_annotations.dart';
@@ -49,6 +50,7 @@ import 'package:aisu_realestate/ui/views/login/login_view.dart';
     LazySingleton(classType: AuthenticationService),
     LazySingleton(classType: PocketBaseService),
     LazySingleton(classType: TenantService),
+    LazySingleton(classType: PaymentService),
 
     // @stacked-service
   ],

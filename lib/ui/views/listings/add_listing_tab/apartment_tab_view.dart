@@ -2,11 +2,9 @@ import 'package:aisu_realestate/app/app_exports.dart';
 import 'package:aisu_realestate/ui/views/listings/listings_viewmodel.dart';
 import 'package:aisu_realestate/ui/widgets/apartment_card.dart';
 import 'package:aisu_realestate/ui/widgets/button_widget.dart';
-import 'package:aisu_realestate/ui/widgets/property_card.dart';
-import 'package:flutter/gestures.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
-import 'package:flutter_svg/svg.dart';
+
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 class ApartmentTabView extends StatelessWidget {
@@ -222,6 +220,7 @@ class ApartmentTabView extends StatelessWidget {
               ),
               verticalSpaceFifteen,
               ButtonWidget(
+                btnColor: kcPersGreen,
                 height: 50,
                 isBusy: false,
                 isDisabled: false,

@@ -28,14 +28,14 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
   ) {
     viewModel.setIsKeyboardOpen(MediaQuery.of(context).viewInsets.bottom != 0);
     return Scaffold(
-      backgroundColor: kcPrimaryColor,
+      backgroundColor: kcBlueColor,
       body: SafeArea(
         child: Stack(
           children: [
             Positioned.fill(
               child: ColorFiltered(
                 colorFilter: ColorFilter.mode(
-                  kcPrimaryColor
+                  kcBlueColor
                       .withOpacity(0.5), // Adjust the opacity of the color
                   BlendMode.srcOver,
                 ),
@@ -72,7 +72,7 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             verticalSpaceLarge,
-                            ManropeText.black("Login", 36, kcPrimaryColor),
+                            ManropeText.black("Login", 36, kcBlueColor),
 
                             verticalSpaceLarge,
                             TextFormField(
@@ -186,7 +186,7 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
                             Align(
                               alignment: Alignment.centerRight,
                               child: ManropeText.bold(
-                                  "Forgot Password?", 14, kcPrimaryColor),
+                                  "Forgot Password?", 14, kcBlueColor),
                             ),
                             // const Spacer(),
                           ],
@@ -216,7 +216,7 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
                     onTap: () => viewModel.loginFunc(),
                   ),
                   verticalSpaceFifteen,
-                  ManropeText.bold("Request demo account", 14, kcPrimaryColor)
+                  ManropeText.bold("Request demo account", 14, kcBlueColor)
                 ],
               ),
             ),

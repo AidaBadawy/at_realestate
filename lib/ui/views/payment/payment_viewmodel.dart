@@ -4,7 +4,10 @@ import 'package:aisu_realestate/models/apartment_model.dart';
 import 'package:aisu_realestate/models/landlord_model.dart';
 import 'package:aisu_realestate/models/payment_model.dart';
 import 'package:aisu_realestate/models/property_model.dart';
+import 'package:aisu_realestate/models/tenant_model.dart';
 import 'package:aisu_realestate/services/listing_service.dart';
+import 'package:aisu_realestate/services/payment_service.dart';
+import 'package:aisu_realestate/services/tenant_service.dart';
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -12,10 +15,13 @@ import 'package:stacked_services/stacked_services.dart';
 class PaymentViewModel extends ReactiveViewModel {
   final _navigationService = locator<NavigationService>();
   final _listingService = locator<ListingService>();
+  final _tenantService = locator<TenantService>();
+  final _paymentService = locator<PaymentService>();
 
   List<LandlordModel> get landlord => _listingService.landlordList;
-  // List<ApartmentModel> get apartmentList => _listingService.apartmentList;
   List<PropertyModel> get propertyList => _listingService.propertyList;
+  List<PaymentModel> get pendingPayment => _paymentService.pendingPaymentList;
+  List<PaymentModel> get recentPayment => _paymentService.recentPaymentList;
 
   List<String> paymentType = [
     "Tenant Payment",
@@ -36,6 +42,9 @@ class PaymentViewModel extends ReactiveViewModel {
 
   LandlordModel _landlordSelected = defaultLanlord;
   LandlordModel get landlordSelected => _landlordSelected;
+
+  TenantModel _tenantSelected = TenantModel();
+  TenantModel get tenantSelected => _tenantSelected;
 
   ApartmentModel _apartmentSelected = defaultApartmentModel;
   ApartmentModel get apartmentSelected => _apartmentSelected;
@@ -64,106 +73,22 @@ class PaymentViewModel extends ReactiveViewModel {
   String _selectedPayBy = "";
   String get selectedPayBy => _selectedPayBy;
 
-  List<PaymentModel> recentPayment = [
-    PaymentModel(
-      id: "1",
-      invoiceNumber: "INV-0001",
-      amount: 20000,
-      landlordId: "1",
-      apartmentId: "2",
-      propertyId: "3",
-      type: "Rent",
-    ),
-    PaymentModel(
-      id: "1",
-      invoiceNumber: "INV-0002",
-      amount: 1500,
-      landlordId: "1",
-      apartmentId: "2",
-      propertyId: "3",
-      type: "Expense",
-    ),
-    PaymentModel(
-      id: "1",
-      amount: 40000,
-      invoiceNumber: "INV-0003",
-      landlordId: "1",
-      apartmentId: "2",
-      propertyId: "3",
-      type: "Deposit",
-    ),
-    PaymentModel(
-      id: "1",
-      invoiceNumber: "INV-0004",
-      amount: 23000,
-      landlordId: "1",
-      apartmentId: "2",
-      propertyId: "3",
-      type: "Rent",
-    ),
-    PaymentModel(
-      id: "1",
-      invoiceNumber: "INV-0005",
-      amount: 250000,
-      landlordId: "1",
-      apartmentId: "2",
-      propertyId: "3",
-      type: "Rent",
-    ),
-  ];
-  List<PaymentModel> pendingPayment = [
-    PaymentModel(
-      id: "1",
-      tenantName: "Aidarus Badawy",
-      amount: 10000,
-      landlordId: "1",
-      apartmentId: "2",
-      propertyId: "3",
-      type: "Rent",
-    ),
-    PaymentModel(
-      id: "1",
-      tenantName: "Swaleh Salim",
-      amount: 1500,
-      landlordId: "1",
-      apartmentId: "2",
-      propertyId: "3",
-      type: "Rent",
-    ),
-    PaymentModel(
-      id: "1",
-      amount: 40000,
-      tenantName: "Ali Abdallah",
-      landlordId: "1",
-      apartmentId: "2",
-      propertyId: "3",
-      type: "Deposit",
-    ),
-    PaymentModel(
-      id: "1",
-      tenantName: "Kamau Joseph",
-      amount: 23000,
-      landlordId: "1",
-      apartmentId: "2",
-      propertyId: "3",
-      type: "Rent",
-    ),
-    PaymentModel(
-      id: "1",
-      tenantName: "Abdallah Swaleh",
-      amount: 250000,
-      landlordId: "1",
-      apartmentId: "2",
-      propertyId: "3",
-      type: "Deposit",
-    ),
-  ];
   initAddPayment() {
     _expandedcontroller = ExpandedTileController(isExpanded: true);
     _expandedcontrollerTwo = ExpandedTileController(isExpanded: false);
     _expandedcontrollerThree = ExpandedTileController(isExpanded: false);
 
     notifyListeners();
+  }
+
+  initPayment() {
+    fetchPayments();
+  }
+
+  fetchPayments() {
+    _paymentService.fetchrecentPayment();
+
+    _paymentService.fetchPendingPayment();
   }
 
   setSelectedPaymentType(String value) {
@@ -189,6 +114,23 @@ class PaymentViewModel extends ReactiveViewModel {
 
     _apartmentListData =
         await _listingService.fetchLandlordApartment(landlordSearch.id);
+
+    notifyListeners();
+  }
+
+  updateTenantSelected(TenantModel tenantSearch) async {
+    _tenantSelected = tenantSearch;
+
+    // _listingService.clearSearchApartment();
+
+    // _apartmentSelected = defaultApartmentModel;
+    // _propertySelected = defaultProperty;
+
+    // _propertyListData = [];
+    // _apartmentListData = [];
+
+    // _apartmentListData =
+    //     await _listingService.fetchLandlordApartment(landlordSearch.id);
 
     notifyListeners();
   }
@@ -248,6 +190,13 @@ class PaymentViewModel extends ReactiveViewModel {
     return matches;
   }
 
+  Future<List<TenantModel>> getSearchTenant(String query) async {
+    List<TenantModel> matches = await _tenantService.searchTotalTenant(query);
+
+    return matches;
+  }
+
   @override
-  List<ListenableServiceMixin> get listenableServices => [_listingService];
+  List<ListenableServiceMixin> get listenableServices =>
+      [_listingService, _paymentService, _tenantService];
 }

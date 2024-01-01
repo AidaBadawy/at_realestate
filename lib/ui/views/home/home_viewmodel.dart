@@ -10,6 +10,7 @@ import 'package:aisu_realestate/services/listing_service.dart';
 import 'package:aisu_realestate/ui/common/app_colors.dart';
 import 'package:aisu_realestate/ui/common/app_strings.dart';
 import 'package:aisu_realestate/ui/common/enums.dart';
+import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -66,7 +67,7 @@ class HomeViewModel extends ReactiveViewModel {
     "Yearly",
   ];
 
-  String _selectedMonth = "";
+  String _selectedMonth = DateFormat("MMMM").format(DateTime.now());
   String get selectedMonth => _selectedMonth;
 
   String _selectedFilter = "Monthly";
@@ -110,6 +111,10 @@ class HomeViewModel extends ReactiveViewModel {
 
   initHome() {
     // fetchAppIds();
+    if (!months.contains(DateFormat("MMMM").format(DateTime.now()))) {
+      months.add(DateFormat("MMMM").format(DateTime.now()));
+    }
+
     fetchTotalCount();
     // _listingService.fetchLandlordPocketBase(1, 1);
   }

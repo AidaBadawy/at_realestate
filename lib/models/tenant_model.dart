@@ -4,6 +4,8 @@ import 'package:aisu_realestate/models/property_model.dart';
 class TenantModel {
   int? balancePayment;
   int? rentPayment;
+  int? deposit;
+  bool? depositPaid;
   final String? collectionId;
   final String? collectionName;
   final DateTime? created;
@@ -18,6 +20,7 @@ class TenantModel {
   String? phone;
   final String? property;
   String? tenantNumber;
+  String? apartment;
   final DateTime? updated;
 
   TenantModel({
@@ -38,15 +41,21 @@ class TenantModel {
     this.property,
     this.tenantNumber,
     this.updated,
+    this.deposit,
+    this.depositPaid,
+    this.apartment,
   });
 
   factory TenantModel.fromJson(Map<String, dynamic> json) => TenantModel(
         balancePayment: json["balance_payment"],
         rentPayment: json["rent_payment"],
+        deposit: json["deposit"],
+        depositPaid: json["deposit_paid"],
         collectionId: json["collectionId"],
         collectionName: json["collectionName"],
-        created:
-            json["created"] == null ? null : DateTime.parse(json["created"]),
+        created: json["created"] == null || json["created"] == ""
+            ? null
+            : DateTime.parse(json["created"]),
         email: json["email"],
         expand: json["expand"] == null
             ? null
@@ -62,13 +71,17 @@ class TenantModel {
         phone: json["phone"],
         property: json["property"],
         tenantNumber: json["tenant_number"],
-        updated:
-            json["updated"] == null ? null : DateTime.parse(json["updated"]),
+        apartment: json["apartment"],
+        updated: json["updated"] == null || json["updated"] == ""
+            ? null
+            : DateTime.parse(json["updated"]),
       );
 
   Map<String, dynamic> toJson() => {
         "balance_payment": balancePayment,
         "rent_payment": rentPayment,
+        "deposit": deposit,
+        "deposit_paid": depositPaid,
         // "collectionId": collectionId,
         // "collectionName": collectionName,
         // "created": created?.toIso8601String(),

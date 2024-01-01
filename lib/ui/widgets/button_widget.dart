@@ -21,7 +21,7 @@ class ButtonWidget extends StatelessWidget {
       this.fontSize = 14,
       required this.isDisabled,
       required this.height,
-      this.btnColor = kcPrimaryColor,
+      this.btnColor = kcBlueColor,
       this.loaderColor = kcWhiteColor,
       required this.isBusy});
 
