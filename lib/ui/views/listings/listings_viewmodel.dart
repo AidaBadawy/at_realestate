@@ -129,6 +129,9 @@ class ListingsViewModel extends ReactiveViewModel {
   String _selectedId = "";
   String get selectedId => _selectedId;
 
+  bool _activateSearch = false;
+  bool get activateSearch => _activateSearch;
+
   initListing() {
     fetchListing();
   }
@@ -580,6 +583,18 @@ class ListingsViewModel extends ReactiveViewModel {
       arguments: InfoListingsViewArguments(landlord: landlord),
       transition: TransitionsBuilders.slideLeftWithFade,
     );
+  }
+
+  activateSearchFunc() {
+    _activateSearch = !_activateSearch;
+    notifyListeners();
+  }
+
+  Future<List<LandlordModel>> getSuggestions(String query) async {
+    List<LandlordModel> matches =
+        await _listingService.searchTotalLandlord(query);
+
+    return matches;
   }
 
   @override

@@ -28,15 +28,15 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
   ) {
     viewModel.setIsKeyboardOpen(MediaQuery.of(context).viewInsets.bottom != 0);
     return Scaffold(
-      backgroundColor: kcBlueColor,
+      backgroundColor: kcBlueDark,
       body: SafeArea(
         child: Stack(
           children: [
             Positioned.fill(
               child: ColorFiltered(
                 colorFilter: ColorFilter.mode(
-                  kcBlueColor
-                      .withOpacity(0.5), // Adjust the opacity of the color
+                  kcBlueDark
+                      .withOpacity(0.7), // Adjust the opacity of the color
                   BlendMode.srcOver,
                 ),
                 child: Image.asset(
@@ -72,7 +72,7 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             verticalSpaceLarge,
-                            ManropeText.black("Login", 36, kcBlueColor),
+                            ManropeText.black("Login", 36, kcBlueDark),
 
                             verticalSpaceLarge,
                             TextFormField(
@@ -186,7 +186,7 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
                             Align(
                               alignment: Alignment.centerRight,
                               child: ManropeText.bold(
-                                  "Forgot Password?", 14, kcBlueColor),
+                                  "Forgot Password?", 14, kcBlueDark),
                             ),
                             // const Spacer(),
                           ],
@@ -214,9 +214,10 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
                     isDisabled: false,
                     text: "Login",
                     onTap: () => viewModel.loginFunc(),
+                    btnColor: kcBlueDark,
                   ),
                   verticalSpaceFifteen,
-                  ManropeText.bold("Request demo account", 14, kcBlueColor)
+                  ManropeText.bold("Request demo account", 14, kcBlueDark)
                 ],
               ),
             ),

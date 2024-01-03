@@ -4,6 +4,7 @@ import 'package:aisu_realestate/ui/views/listings/listings_view.dart';
 import 'package:aisu_realestate/ui/views/payment/payment_view.dart';
 import 'package:aisu_realestate/ui/views/settings/settings_view.dart';
 import 'package:aisu_realestate/ui/views/tenants/tenants_view.dart';
+import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
@@ -21,71 +22,120 @@ class WrapperView extends StackedView<WrapperViewModel> {
     WrapperViewModel viewModel,
     Widget? child,
   ) {
-    // return Scaffold(
-    //   appBar: AppBar(
-    //     // title: Text(viewModel.title[viewModel.selectedIndex]),
-    //     title: ManropeText.bold(
-    //         viewModel.title[viewModel.selectedIndex], 16, kcBlackColor),
-    //     actions: [
-    //       // IconButton(onPressed: () {}, icon: const Icon(AntDesign.message1)),
-    //       IconButton(onPressed: () {}, icon: const Icon(Feather.bell))
-    //     ],
-    //     elevation: 0,
-    //     backgroundColor: kcWhiteColor,
-    //     iconTheme: const IconThemeData(color: kcBlackColor),
-    //   ),
-    //   drawer: DrawerWidget(
-    //     viewModel: viewModel,
-    //   ),
-    //   backgroundColor: Theme.of(context).colorScheme.background,
-    //   body: _widgetOptions[viewModel.selectedIndex],
-
-    // );
-    return PersistentTabView(
-      context,
-      controller: viewModel.controller,
-      screens: _widgetOptions(),
-      items: _navBarsItems(),
-      confineInSafeArea: true,
-      backgroundColor: Colors.white, // Default is Colors.white.
-      handleAndroidBackButtonPress: true, // Default is true.
-      resizeToAvoidBottomInset:
-          true, // This needs to be true if you want to move up the screen when keyboard appears. Default is true.
-      stateManagement: true, // Default is true.
-      hideNavigationBarWhenKeyboardShows:
-          true, // Recommended to set 'resizeToAvoidBottomInset' as true while using this argument. Default is true.
-      decoration: NavBarDecoration(
-        borderRadius: BorderRadius.circular(10.0),
-        colorBehindNavBar: Colors.white,
+    return Scaffold(
+      //   appBar: AppBar(
+      //     // title: Text(viewModel.title[viewModel.selectedIndex]),
+      //     title: ManropeText.bold(
+      //         viewModel.title[viewModel.selectedIndex], 16, kcBlackColor),
+      //     actions: [
+      //       // IconButton(onPressed: () {}, icon: const Icon(AntDesign.message1)),
+      //       IconButton(onPressed: () {}, icon: const Icon(Feather.bell))
+      //     ],
+      //     elevation: 0,
+      //     backgroundColor: kcWhiteColor,
+      //     iconTheme: const IconThemeData(color: kcBlackColor),
+      //   ),
+      //   drawer: DrawerWidget(
+      //     viewModel: viewModel,
+      //   ),
+      //   backgroundColor: Theme.of(context).colorScheme.background,
+      body: getViewForIndex(viewModel.selectedIndex),
+      floatingActionButton: FloatingActionButton(
+        heroTag: "wrapper",
+        backgroundColor: kcBlueDark,
+        onPressed: () => viewModel.onItemTapped(4),
+        child: const Icon(Feather.home),
       ),
-
-      popAllScreensOnTapOfSelectedTab: true,
-      popActionScreens: PopActionScreensType.all,
-      itemAnimationProperties: const ItemAnimationProperties(
-        // Navigation Bar's items animation properties.
-        duration: Duration(milliseconds: 200),
-        curve: Curves.ease,
-      ),
-      screenTransitionAnimation: const ScreenTransitionAnimation(
-        // Screen transition animation on change of selected tab.
-        animateTabTransition: true,
-        curve: Curves.ease,
-        duration: Duration(milliseconds: 200),
-      ),
-
-      navBarStyle:
-          NavBarStyle.style15, // Choose the nav bar style with this property.
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: AnimatedBottomNavigationBar(
+          icons: const [
+            Feather.credit_card,
+            // Feather.credit_card,
+            Feather.user_check,
+            Feather.users,
+            Feather.menu,
+          ],
+          activeIndex: viewModel.selectedIndex,
+          activeColor: kcBlueDark,
+          inactiveColor: kcLightGrey,
+          gapLocation: GapLocation.center,
+          notchSmoothness: NotchSmoothness.defaultEdge,
+          leftCornerRadius: 0,
+          rightCornerRadius: 0,
+          onTap: (index) => viewModel.onItemTapped(index)
+          //other params
+          ),
     );
+    // return PersistentTabView(
+    //   context,
+    //   controller: viewModel.controller,
+    //   screens: _widgetOptions(),
+    //   items: _navBarsItems(),
+    //   confineInSafeArea: true,
+    //   backgroundColor: Colors.white, // Default is Colors.white.
+    //   handleAndroidBackButtonPress: true, // Default is true.
+    //   resizeToAvoidBottomInset:
+    //       true, // This needs to be true if you want to move up the screen when keyboard appears. Default is true.
+    //   stateManagement: true, // Default is true.
+    //   hideNavigationBarWhenKeyboardShows:
+    //       true, // Recommended to set 'resizeToAvoidBottomInset' as true while using this argument. Default is true.
+    //   decoration: NavBarDecoration(
+    //     borderRadius: BorderRadius.circular(10.0),
+    //     colorBehindNavBar: Colors.white,
+    //   ),
+
+    //   popAllScreensOnTapOfSelectedTab: true,
+    //   popActionScreens: PopActionScreensType.all,
+    //   itemAnimationProperties: const ItemAnimationProperties(
+    //     // Navigation Bar's items animation properties.
+    //     duration: Duration(milliseconds: 200),
+    //     curve: Curves.ease,
+    //   ),
+    //   screenTransitionAnimation: const ScreenTransitionAnimation(
+    //     // Screen transition animation on change of selected tab.
+    //     animateTabTransition: true,
+    //     curve: Curves.ease,
+    //     duration: Duration(milliseconds: 200),
+    //   ),
+
+    //   navBarStyle:
+    //       NavBarStyle.style15, // Choose the nav bar style with this property.
+    // );
   }
 
-  List<Widget> _widgetOptions() {
-    return [
-      const PaymentView(),
-      const ListingsView(),
-      const HomeView(),
-      const TenantsView(),
-      const SettingsView(),
-    ];
+  // List<Widget> _widgetOptions() {
+  //   return [
+  //     const PaymentView(),
+  //     const ListingsView(),
+  //     const HomeView(),
+  //     const TenantsView(),
+  //     const SettingsView(),
+  //   ];
+  // }
+
+  // final List<Widget> _widgetOptions = [
+  //   const PaymentView(),
+  //   const ListingsView(),
+  //   const HomeView(),
+  //   const TenantsView(),
+  //   const SettingsView(),
+  // ];
+
+  Widget getViewForIndex(int index) {
+    switch (index) {
+      case 0:
+        return const PaymentView();
+      case 1:
+        return const ListingsView();
+      case 2:
+        return const TenantsView();
+
+      case 3:
+        return const SettingsView();
+
+      default:
+        return const HomeView();
+    }
   }
 
   List<PersistentBottomNavBarItem> _navBarsItems() {

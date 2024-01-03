@@ -5,6 +5,7 @@ import 'package:aisu_realestate/ui/common/styles.dart';
 import 'package:aisu_realestate/ui/common/ui_helpers.dart';
 import 'package:aisu_realestate/ui/widgets/tenant_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:lottie/lottie.dart';
 import 'package:stacked/stacked.dart';
 
@@ -21,6 +22,11 @@ class TenantsView extends StackedView<TenantsViewModel> {
   ) {
     return Scaffold(
       backgroundColor: kcWhiteColor,
+      appBar: AppBar(
+        backgroundColor: kcBlueDark,
+        leading: const Icon(Feather.users),
+        title: ManropeText.bold("Tenants", 16, kcWhiteColor),
+      ),
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: () async {

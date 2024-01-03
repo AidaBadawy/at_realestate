@@ -19,6 +19,7 @@ class WrapperViewModel extends ReactiveViewModel {
   PersistentTabController get controller => _controller;
 
   initWrapper() {
+    _selectedIndex = 4;
     _controller = PersistentTabController(initialIndex: 2);
   }
 

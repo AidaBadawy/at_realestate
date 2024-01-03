@@ -9,6 +9,12 @@ import 'package:google_fonts/google_fonts.dart';
 // fonts
 
 //Rubik regular
+TextStyle manropeLightFonts = GoogleFonts.manrope(
+  fontSize: 14.0,
+  fontWeight: FontWeight.w300,
+  color: kcMediumGrey,
+);
+
 TextStyle manropeRegularFonts = GoogleFonts.manrope(
   fontSize: 14.0,
   fontWeight: FontWeight.w400,

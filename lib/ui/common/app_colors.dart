@@ -5,6 +5,7 @@ const Color kcPrimaryColor = Color(0xFF2196F3);
 
 const Color kcBlueColor = Color(0xFF2196F3);
 const Color kcPrimaryColorDark = Color(0xFF300151);
+const Color kcBlueDark = Color(0xff134570);
 const Color kcPrimaryColorHighlight = Color(0xFFE3F2FD);
 const Color kcDarkGreyColor = Color(0xFF1A1B1E);
 const Color kcMediumGrey = Color(0xFF474A54);

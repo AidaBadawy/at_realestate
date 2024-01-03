@@ -2,6 +2,7 @@ import 'package:aisu_realestate/main.dart';
 import 'package:aisu_realestate/ui/widgets/payment_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:lottie/lottie.dart';
 import 'package:stacked/stacked.dart';
 
 import 'payment_viewmodel.dart';
@@ -18,7 +19,7 @@ class PaymentView extends StackedView<PaymentViewModel> {
     return Scaffold(
       backgroundColor: kcWhiteColor,
       appBar: AppBar(
-        backgroundColor: kcBlueColor.withOpacity(.7),
+        backgroundColor: kcBlueDark,
         leading: const Icon(Feather.credit_card),
         title: ManropeText.bold("Payments", 16, kcWhiteColor),
       ),
@@ -47,22 +48,40 @@ class PaymentView extends StackedView<PaymentViewModel> {
                       onRefresh: () async {
                         viewModel.initPayment();
                       },
-                      child: ListView.separated(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        itemBuilder: (context, index) {
-                          return PaymentCard(
-                            paymentModel: viewModel.recentPayment[index],
-                            isPending: false,
-                          );
-                        },
-                        separatorBuilder: (context, index) {
-                          // return const Divider(
-                          //   thickness: 1,
-                          // );
-                          return verticalSpaceFifteen;
-                        },
-                        itemCount: viewModel.recentPayment.length,
-                      ),
+                      child: viewModel.recentPayment.isEmpty
+                          ? Center(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  LottieBuilder.asset(
+                                    emptyLottie,
+                                    height: 180,
+                                    repeat: false,
+                                  ),
+                                  ManropeText.medium("No Recent Payments", 14,
+                                      kcDarkGreyColor),
+                                  verticalSpaceLarge,
+                                ],
+                              ),
+                            )
+                          : ListView.separated(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              itemBuilder: (context, index) {
+                                return PaymentCard(
+                                  paymentModel: viewModel.recentPayment[index],
+                                  isPending: false,
+                                );
+                              },
+                              separatorBuilder: (context, index) {
+                                // return const Divider(
+                                //   thickness: 1,
+                                // );
+                                return verticalSpaceFifteen;
+                              },
+                              itemCount: viewModel.recentPayment.length,
+                            ),
                     ),
                     ListView.separated(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
